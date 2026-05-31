@@ -1,0 +1,174 @@
+---
+import '../styles/calc.css';
+---
+
+<div class="calc">
+	<p class="calc-intro">
+		输入亲戚关系链（如「妈妈的妈妈的兄弟」），或输入称呼反向查询关系。算法基于
+		<a href="https://github.com/mumuy/relationship" target="_blank" rel="noopener">relationship.js</a>，在浏览器本地计算。
+	</p>
+
+	<div class="calc-panel">
+		<div class="calc-options">
+			<div class="calc-field">
+				<label for="calc-sex">我的性别</label>
+				<select id="calc-sex">
+					<option value="1">男</option>
+					<option value="0">女</option>
+				</select>
+			</div>
+			<div class="calc-field">
+				<label for="calc-reverse">称呼方式</label>
+				<select id="calc-reverse">
+					<option value="false">我称呼对方</option>
+					<option value="true">对方称呼我</option>
+				</select>
+			</div>
+			<div class="calc-field">
+				<label for="calc-type">计算类型</label>
+				<select id="calc-type">
+					<option value="default">关系 → 称呼</option>
+					<option value="chain">称呼 → 关系链</option>
+				</select>
+			</div>
+		</div>
+
+		<div class="calc-shortcuts" id="calc-shortcuts">
+			<button type="button" data-token="爸爸">父</button>
+			<button type="button" data-token="妈妈">母</button>
+			<button type="button" data-token="老公">夫</button>
+			<button type="button" data-token="老婆">妻</button>
+			<button type="button" data-token="哥哥">兄</button>
+			<button type="button" data-token="弟弟">弟</button>
+			<button type="button" data-token="姐姐">姐</button>
+			<button type="button" data-token="妹妹">妹</button>
+			<button type="button" data-token="儿子">子</button>
+			<button type="button" data-token="女儿">女</button>
+		</div>
+
+		<div class="calc-input-row">
+			<input
+				id="calc-input"
+				type="text"
+				placeholder="例如：妈妈的妈妈的兄弟，或：七舅姥爷"
+				autocomplete="off"
+				spellcheck="false"
+			/>
+		</div>
+
+		<div class="calc-actions">
+			<button type="button" id="calc-back">回退</button>
+			<button type="button" id="calc-clear">清空</button>
+			<button type="button" id="calc-run" class="primary">计算</button>
+		</div>
+
+		<div id="calc-result" class="calc-result empty">计算结果将显示在这里</div>
+	</div>
+
+	<p class="calc-hint">
+		支持自然语言，如「舅妈如何称呼外婆？」。也可通过 URL 分享：<code>?q=妈妈的妈妈的兄弟</code>
+	</p>
+</div>
+
+<script>
+	import relationship from 'relationship.js';
+
+	const input = document.getElementById('calc-input');
+	const result = document.getElementById('calc-result');
+	const sexSelect = document.getElementById('calc-sex');
+	const reverseSelect = document.getElementById('calc-reverse');
+	const typeSelect = document.getElementById('calc-type');
+	const shortcuts = document.getElementById('calc-shortcuts');
+
+	function getOptions() {
+		return {
+			text: input.value.trim(),
+			sex: Number(sexSelect.value),
+			reverse: reverseSelect.value === 'true',
+			type: typeSelect.value,
+		};
+	}
+
+	function showResult(values, isError = false) {
+		result.classList.remove('empty', 'error');
+		if (isError) {
+			result.classList.add('error');
+			result.textContent = values;
+			return;
+		}
+		if (!values.length) {
+			result.classList.add('empty');
+			result.textContent = '未找到匹配结果，请检查输入';
+			return;
+		}
+		result.textContent = values.join(' / ');
+	}
+
+	function runCalc() {
+		const text = input.value.trim();
+		if (!text) {
+			showResult('请输入关系或称呼', true);
+			return;
+		}
+
+		try {
+			const options = getOptions();
+			const output =
+				text.includes('？') || text.includes('?') || /如何|什么关系|叫什么/.test(text)
+					? relationship(text)
+					: relationship(options);
+
+			const values = Array.isArray(output) ? output : [String(output)];
+			showResult(values.filter(Boolean));
+			syncQuery(text);
+		} catch (error) {
+			showResult(error instanceof Error ? error.message : '计算出错', true);
+		}
+	}
+
+	function appendToken(token) {
+		const current = input.value.trim();
+		input.value = current ? `${current}的${token}` : token;
+		input.focus();
+	}
+
+	function syncQuery(text) {
+		const url = new URL(window.location.href);
+		if (text) {
+			url.searchParams.set('q', text);
+		} else {
+			url.searchParams.delete('q');
+		}
+		window.history.replaceState({}, '', url);
+	}
+
+	document.getElementById('calc-run')?.addEventListener('click', runCalc);
+	document.getElementById('calc-clear')?.addEventListener('click', () => {
+		input.value = '';
+		syncQuery('');
+		result.classList.add('empty');
+		result.classList.remove('error');
+		result.textContent = '计算结果将显示在这里';
+	});
+	document.getElementById('calc-back')?.addEventListener('click', () => {
+		const parts = input.value.trim().split('的');
+		parts.pop();
+		input.value = parts.join('的');
+	});
+	input?.addEventListener('keydown', (event) => {
+		if (event.key === 'Enter') runCalc();
+	});
+	shortcuts?.addEventListener('click', (event) => {
+		const target = event.target;
+		if (!(target instanceof HTMLButtonElement)) return;
+		const token = target.dataset.token;
+		if (token) appendToken(token);
+	});
+
+	const params = new URLSearchParams(window.location.search);
+	const initial = params.get('q');
+	if (initial) {
+		input.value = initial;
+		runCalc();
+	}
+</script>

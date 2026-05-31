@@ -1,0 +1,39 @@
+---
+title: 亲戚百科
+description: 中国亲戚关系计算器与科普文章，帮你搞清称呼、理解习俗。
+template: splash
+hero:
+  tagline: 算称呼，读懂中国亲戚文化
+  image:
+    file: ../../assets/logo.svg
+    alt: 亲戚百科
+  actions:
+    - text: 在线计算器
+      link: /calc/
+      icon: right-arrow
+    - text: 阅读科普文章
+      link: /articles/why-niangqin-jiuda/
+      icon: document
+      variant: minimal
+---
+
+import { Card, CardGrid } from '@astrojs/starlight/components';
+
+## 这个网站做什么
+
+<CardGrid stagger>
+	<Card title="亲戚关系计算器" icon="rocket">
+		输入「妈妈的妈妈的兄弟」或「七舅姥爷」，在浏览器本地即时算出称呼，支持反向查询与自然语言。
+		[立即使用 →](/calc/)
+	</Card>
+	<Card title="科普文章" icon="open-book">
+		解读「娘亲舅大」等习俗典故，辨析堂表、侄甥等容易混淆的称呼。
+		[开始阅读 →](/articles/why-niangqin-jiuda/)
+	</Card>
+	<Card title="轻量静态站点" icon="setting">
+		科普文章以 Markdown 编写，构建为静态 HTML，适合部署到 Cloudflare Pages。
+	</Card>
+	<Card title="开源算法" icon="github">
+		计算器基于 [relationship.js](https://github.com/mumuy/relationship)（MIT），感谢原作者维护亲戚关系数据。
+	</Card>
+</CardGrid>

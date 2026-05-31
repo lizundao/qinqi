@@ -1,0 +1,16 @@
+---
+import StarlightPage from '@astrojs/starlight/components/StarlightPage.astro';
+import Calculator from '../components/Calculator.astro';
+---
+
+<StarlightPage
+	frontmatter={{
+		title: '亲戚关系计算器',
+		description: '输入亲戚关系或称呼，即时计算正确叫法。支持反向查询与自然语言。',
+		template: 'splash',
+		tableOfContents: false,
+		pagefind: false,
+	}}
+>
+	<Calculator />
+</StarlightPage>
