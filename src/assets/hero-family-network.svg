@@ -1,0 +1,86 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" role="img" aria-label="²sûQÜ:þ">
+  <defs>
+    <radialGradient id="glow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#2563eb" stop-opacity="0.16"/>
+      <stop offset="100%" stop-color="#2563eb" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="lineGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#60a5fa" stop-opacity="0.5"/>
+      <stop offset="100%" stop-color="#2563eb" stop-opacity="0.9"/>
+    </linearGradient>
+    <linearGradient id="hubGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#3b82f6"/>
+      <stop offset="100%" stop-color="#1d4ed8"/>
+    </linearGradient>
+    <linearGradient id="warmGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#fb923c"/>
+      <stop offset="100%" stop-color="#c2410c"/>
+    </linearGradient>
+  </defs>
+
+  <circle cx="200" cy="200" r="158" fill="url(#glow)"/>
+  <circle cx="200" cy="200" r="120" fill="none" stroke="#2563eb" stroke-opacity="0.1" stroke-width="1.5" stroke-dasharray="5 9"/>
+  <circle cx="200" cy="200" r="86" fill="none" stroke="#2563eb" stroke-opacity="0.07" stroke-width="1"/>
+
+  <!-- sûÞ¿ -->
+  <g fill="none" stroke="url(#lineGrad)" stroke-width="2.25" stroke-linecap="round">
+    <path d="M120 95 L200 175"/>
+    <path d="M280 95 L200 175"/>
+    <path d="M120 95 L280 95"/>
+    <path d="M200 175 L200 225"/>
+    <path d="M200 175 L88 205"/>
+    <path d="M200 175 L312 205"/>
+    <path d="M200 225 L135 295"/>
+    <path d="M200 225 L265 295"/>
+    <path d="M200 225 L200 320"/>
+    <path d="M88 205 L48 255" opacity="0.55"/>
+    <path d="M312 205 L352 255" opacity="0.55"/>
+    <path d="M135 295 L95 335" opacity="0.5"/>
+    <path d="M265 295 L305 335" opacity="0.5"/>
+  </g>
+
+  <!-- Ü²Z¿ -->
+  <g fill="none" stroke="#60a5fa" stroke-width="1.15" stroke-dasharray="4 7" opacity="0.32">
+    <path d="M48 255 L95 335"/>
+    <path d="M352 255 L305 335"/>
+    <path d="M88 205 L135 295"/>
+    <path d="M312 205 L265 295"/>
+  </g>
+
+  <!-- ‚¹ -->
+  <g>
+    <circle cx="120" cy="95" r="15" fill="#eff6ff" stroke="#93c5fd" stroke-width="2"/>
+    <circle cx="280" cy="95" r="15" fill="#eff6ff" stroke="#93c5fd" stroke-width="2"/>
+    <circle cx="88" cy="205" r="13" fill="#eff6ff" stroke="#93c5fd" stroke-width="1.8"/>
+    <circle cx="312" cy="205" r="13" fill="#eff6ff" stroke="#93c5fd" stroke-width="1.8"/>
+    <circle cx="135" cy="295" r="12" fill="url(#warmGrad)" stroke="#ea580c" stroke-width="2"/>
+    <circle cx="265" cy="295" r="12" fill="#eff6ff" stroke="#93c5fd" stroke-width="1.8"/>
+    <circle cx="200" cy="320" r="11" fill="#eff6ff" stroke="#93c5fd" stroke-width="1.8"/>
+    <circle cx="48" cy="255" r="9" fill="#f8fafc" stroke="#bfdbfe" stroke-width="1.5"/>
+    <circle cx="352" cy="255" r="9" fill="#f8fafc" stroke="#bfdbfe" stroke-width="1.5"/>
+    <circle cx="95" cy="335" r="8" fill="#f8fafc" stroke="#bfdbfe" stroke-width="1.4"/>
+    <circle cx="305" cy="335" r="8" fill="#f8fafc" stroke="#bfdbfe" stroke-width="1.4"/>
+    <circle cx="200" cy="225" r="14" fill="#dbeafe" stroke="#3b82f6" stroke-width="2"/>
+    <circle cx="200" cy="200" r="27" fill="url(#hubGrad)" stroke="#1e40af" stroke-width="2.5"/>
+  </g>
+
+  <!-- -Ã -->
+  <g fill="#fff" transform="translate(200 200)">
+    <circle cx="0" cy="-7" r="7.5"/>
+    <path d="M-11 18c0-7.5 22-7.5 22 0V24H-11z"/>
+  </g>
+
+  <!-- ‚¹…¹ -->
+  <g fill="#2563eb" opacity="0.85">
+    <circle cx="120" cy="95" r="4"/>
+    <circle cx="280" cy="95" r="4"/>
+    <circle cx="88" cy="205" r="3.5"/>
+    <circle cx="312" cy="205" r="3.5"/>
+    <circle cx="265" cy="295" r="3.5"/>
+    <circle cx="200" cy="320" r="3"/>
+    <circle cx="200" cy="225" r="3.5" fill="#1d4ed8"/>
+  </g>
+  <circle cx="135" cy="295" r="3.5" fill="#fff" opacity="0.9"/>
+
+  <circle cx="193" cy="193" r="7" fill="#fff" opacity="0.2"/>
+</svg>

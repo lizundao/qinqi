@@ -1,0 +1,120 @@
+---
+import { getArticles, getArticleHref } from '../utils/articles';
+
+interface Props {
+	showHeader?: boolean;
+	compact?: boolean;
+	grid?: boolean;
+}
+
+const { showHeader = false, compact = false, grid = false } = Astro.props;
+const articles = await getArticles();
+
+function formatDate(date: Date | undefined) {
+	if (!date) return '';
+	return date.toLocaleDateString('zh-CN', {
+		year: 'numeric',
+		month: 'long',
+		day: 'numeric',
+	});
+}
+
+const isHomeGrid = compact && grid;
+---
+
+<section class="article-list-page w-full">
+	{
+		showHeader && (
+			<header class="mb-7">
+				<h1 class="mb-2 text-xl font-bold tracking-tight text-slate-900 dark:text-slate-100">亲戚常识</h1>
+				<p class="text-sm leading-relaxed text-slate-500 dark:text-slate-400">
+					从习俗与历史入手，弄懂称呼背后的文化逻辑，走亲戚不再尴尬。
+				</p>
+			</header>
+		)
+	}
+	{
+		articles.length === 0 ? (
+			<p class="rounded-xl border border-dashed border-slate-300 px-4 py-8 text-center text-sm text-slate-500 dark:border-slate-700 dark:text-slate-400">
+				暂无文章，请在 <code class="rounded bg-slate-100 px-1 dark:bg-slate-800">src/content/docs/articles/</code>{' '}
+				添加内容。
+			</p>
+		) : (
+			<ul
+				class:list={[
+					'grid list-none p-0',
+					isHomeGrid ? 'gap-3 md:gap-4' : 'gap-5 md:gap-6',
+					grid && 'md:grid-cols-2 lg:grid-cols-3',
+				]}
+			>
+				{
+					articles.map((article) => (
+						<li>
+							<a
+								class:list={[
+									'article-card group flex h-full w-full flex-col rounded-2xl border border-slate-200/80 bg-white/90 text-inherit no-underline shadow-sm transition hover:-translate-y-0.5 hover:border-blue-200/80 hover:shadow-md dark:border-slate-700/80 dark:bg-slate-900/90 dark:hover:border-blue-800/80',
+									isHomeGrid ? 'px-4 py-4 sm:px-5 sm:py-5' : compact ? 'px-5 py-5' : 'px-6 py-6',
+								]}
+								href={getArticleHref(article)}
+							>
+								<div class:list={['flex flex-col', isHomeGrid ? 'flex-1 gap-2' : 'flex-1 gap-2.5']}>
+									<p
+										class:list={[
+											'font-semibold text-slate-900 transition group-hover:text-brand dark:text-slate-100 dark:group-hover:text-blue-400',
+											isHomeGrid
+												? 'line-clamp-2 text-[0.9375rem] leading-snug'
+												: compact
+													? 'text-base leading-normal'
+													: 'text-lg leading-normal',
+										]}
+									>
+										{article.data.title}
+									</p>
+									{article.data.description && (
+										<p
+											class:list={[
+												'm-0 text-slate-600 dark:text-slate-400',
+												isHomeGrid
+													? 'line-clamp-2 text-[0.8125rem] leading-[1.65]'
+													: 'text-sm leading-relaxed',
+											]}
+										>
+											{article.data.description}
+										</p>
+									)}
+								</div>
+								<div
+									class:list={[
+										'flex flex-wrap items-center gap-1.5 border-t border-slate-100 dark:border-slate-800',
+										isHomeGrid ? 'mt-4 pt-3' : 'mt-6 pt-3.5',
+									]}
+								>
+									{article.data.date && (
+										<time
+											class="inline-flex shrink-0 items-center text-xs text-slate-500 dark:text-slate-400"
+											datetime={article.data.date.toISOString()}
+										>
+											{formatDate(article.data.date)}
+										</time>
+									)}
+									{
+										article.data.tags?.map((tag) => (
+											<span
+												class:list={[
+													'inline-flex items-center rounded-full bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-400',
+													isHomeGrid ? 'px-2 py-0.5 text-[0.6875rem]' : 'px-2.5 py-0.5 text-xs',
+												]}
+											>
+												{tag}
+											</span>
+										))
+									}
+								</div>
+							</a>
+						</li>
+					))
+				}
+			</ul>
+		)
+	}
+</section>

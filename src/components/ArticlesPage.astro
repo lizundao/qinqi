@@ -1,0 +1,144 @@
+---
+import { getArticles, getArticleHref } from '../utils/articles';
+
+const articles = await getArticles();
+
+function formatDate(date: Date | undefined) {
+	if (!date) return '';
+	return date.toLocaleDateString('zh-CN', {
+		year: 'numeric',
+		month: 'long',
+		day: 'numeric',
+	});
+}
+
+function searchText(title: string, description: string | undefined, tags: string[] | undefined) {
+	return [title, description ?? '', ...(tags ?? [])].join(' ').toLowerCase();
+}
+---
+
+<div class="articles-page mx-auto w-full max-w-6xl">
+	<header class="mb-8 md:mb-10">
+		<p class="text-xs font-semibold tracking-wide text-brand dark:text-blue-400">知识库</p>
+		<h1 class="mt-1 text-2xl font-bold tracking-tight text-slate-900 md:text-[1.75rem] dark:text-slate-100">
+			亲戚常识
+		</h1>
+		<p class="mt-2 max-w-2xl text-sm leading-relaxed text-slate-500 md:text-[0.9375rem] dark:text-slate-400">
+			从习俗与历史入手，弄懂称呼背后的文化逻辑，走亲戚不再尴尬。
+		</p>
+		<p class="mt-3 text-xs text-slate-400 dark:text-slate-500">共 {articles.length} 篇</p>
+	</header>
+
+	<label class="mb-8 block md:mb-10">
+		<span class="sr-only">搜索文章</span>
+		<div class="relative">
+			<svg
+				class="pointer-events-none absolute top-1/2 left-4 h-4 w-4 -translate-y-1/2 text-slate-400"
+				viewBox="0 0 24 24"
+				fill="none"
+				stroke="currentColor"
+				stroke-width="2"
+				aria-hidden="true"
+			>
+				<circle cx="11" cy="11" r="7"></circle>
+				<path d="M20 20l-3.5-3.5" stroke-linecap="round"></path>
+			</svg>
+			<input
+				id="articles-search"
+				type="search"
+				placeholder="搜索文章标题、摘要或标签…"
+				autocomplete="off"
+				class="w-full rounded-2xl border border-slate-200/90 bg-white py-3.5 pr-4 pl-11 text-sm text-slate-800 shadow-sm outline-none transition placeholder:text-slate-400 focus:border-brand focus:ring-4 focus:ring-blue-500/15 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100 dark:placeholder:text-slate-500 dark:focus:border-blue-500"
+			/>
+		</div>
+	</label>
+
+	{
+		articles.length === 0 ? (
+			<p class="rounded-2xl border border-dashed border-slate-300 px-4 py-12 text-center text-sm text-slate-500 dark:border-slate-700 dark:text-slate-400">
+				暂无文章，请在{' '}
+				<code class="rounded bg-slate-100 px-1 dark:bg-slate-800">src/content/docs/articles/</code> 添加内容。
+			</p>
+		) : (
+			<>
+				<ul
+					id="articles-list"
+					class="grid list-none gap-4 p-0 md:grid-cols-2 md:gap-5 xl:grid-cols-3"
+				>
+					{
+						articles.map((article) => (
+							<li
+								data-article-item
+								data-search={searchText(
+									article.data.title,
+									article.data.description,
+									article.data.tags,
+								)}
+							>
+								<a
+									class="article-card group flex h-full flex-col rounded-2xl border border-slate-200/80 bg-white/90 p-5 text-inherit no-underline shadow-sm transition duration-300 hover:-translate-y-0.5 hover:border-blue-200/80 hover:shadow-md sm:p-6 dark:border-slate-700/80 dark:bg-slate-900/90 dark:hover:border-blue-800/80"
+									href={getArticleHref(article)}
+								>
+									<div class="flex flex-1 flex-col gap-2.5">
+										<h2 class="line-clamp-2 text-base font-semibold leading-snug text-slate-900 transition group-hover:text-brand dark:text-slate-100 dark:group-hover:text-blue-400">
+											{article.data.title}
+										</h2>
+										{
+											article.data.description && (
+												<p class="line-clamp-3 text-sm leading-[1.65] text-slate-600 dark:text-slate-400">
+													{article.data.description}
+												</p>
+											)
+										}
+									</div>
+
+									<div class="mt-5 flex flex-wrap items-center gap-1.5 border-t border-slate-100 pt-4 dark:border-slate-800">
+										{
+											article.data.date && (
+												<time
+													class="text-xs text-slate-500 dark:text-slate-400"
+													datetime={article.data.date.toISOString()}
+												>
+													{formatDate(article.data.date)}
+												</time>
+											)
+										}
+										{
+											article.data.tags?.map((tag) => (
+												<span class="inline-flex items-center rounded-full bg-blue-50 px-2.5 py-0.5 text-xs text-brand-dark dark:bg-blue-950/50 dark:text-blue-300">
+													{tag}
+												</span>
+											))
+										}
+									</div>
+
+									<span class="mt-4 inline-flex items-center gap-1 text-sm font-medium text-brand opacity-80 transition group-hover:gap-1.5 group-hover:opacity-100 dark:text-blue-400">
+										阅读全文
+										<svg class="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true">
+											<path d="M5 12h14M13 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round" />
+										</svg>
+									</span>
+								</a>
+							</li>
+						))
+					}
+				</ul>
+
+				<p
+					id="articles-empty"
+					class="hidden rounded-2xl border border-dashed border-slate-300 px-4 py-12 text-center text-sm text-slate-500 dark:border-slate-700 dark:text-slate-400"
+				>
+					没有找到匹配的文章，试试其他关键词。
+				</p>
+
+				<nav
+					id="articles-pagination"
+					class="mt-10 flex items-center justify-center gap-3 md:mt-12"
+					aria-label="文章分页"
+				/>
+			</>
+		)
+	}
+</div>
+
+<script src="../scripts/articles-page.ts"></script>

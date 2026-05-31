@@ -1,0 +1,87 @@
+---
+const features = [
+	{
+		title: '亲戚关系计算器',
+		desc: '输入关系链或称呼，本地即时算出结果。支持反向查询与自然语言问法。',
+		href: '/calc/',
+		cta: '立即使用',
+		tone: 'blue' as const,
+		icon: 'calc' as const,
+		highlight: '七舅姥爷 → 舅外公',
+	},
+	{
+		title: '亲戚常识',
+		desc: '读懂「娘亲舅大」等典故，辨析堂表、侄甥等容易叫混的称呼。',
+		href: '/articles/',
+		cta: '查看全部',
+		tone: 'warm' as const,
+		icon: 'book' as const,
+		highlight: '习俗 · 历史 · 辨析',
+	},
+];
+---
+
+<section class="grid w-full gap-4 md:grid-cols-2 md:gap-5">
+	{
+		features.map((item) => (
+			<a
+				class:list={[
+					'group flex flex-col gap-3 rounded-2xl border p-5 text-inherit no-underline shadow-sm transition duration-300 hover:-translate-y-0.5 hover:shadow-md sm:p-5',
+					item.tone === 'blue' &&
+						'border-blue-100/80 bg-gradient-to-br from-white to-blue-50/60 hover:border-blue-200 dark:border-blue-900/50 dark:from-slate-900 dark:to-blue-950/30 dark:hover:border-blue-800',
+					item.tone === 'warm' &&
+						'border-orange-100/80 bg-gradient-to-br from-white to-orange-50/50 hover:border-orange-200 dark:border-orange-900/40 dark:from-slate-900 dark:to-orange-950/20 dark:hover:border-orange-800',
+				]}
+				href={item.href}
+			>
+				<div
+					class:list={[
+						'grid h-12 w-12 place-items-center rounded-xl shadow-sm',
+						item.tone === 'blue' && 'bg-brand text-white dark:bg-blue-600',
+						item.tone === 'warm' && 'bg-warm text-white dark:bg-orange-600',
+					]}
+					aria-hidden="true"
+				>
+					{item.icon === 'calc' ? (
+						<svg class="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75">
+							<rect x="4" y="3" width="16" height="18" rx="2" />
+							<path d="M8 7h8M8 11h2M12 11h2M16 11h0M8 15h2M12 15h2M16 15h0" />
+						</svg>
+					) : (
+						<svg class="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75">
+							<path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H18v18H6.5A2.5 2.5 0 0 1 4 18.5v-13Z" />
+							<path d="M8 7h8M8 11h6M8 15h4" />
+						</svg>
+					)}
+				</div>
+
+				<div class="flex flex-col gap-1.5">
+					<h3 class="text-[1.0625rem] font-semibold leading-snug text-slate-900 dark:text-slate-100">{item.title}</h3>
+					<p
+						class:list={[
+							'text-[0.8125rem] font-medium',
+							item.tone === 'blue' && 'text-brand/80 dark:text-blue-400/80',
+							item.tone === 'warm' && 'text-warm/80 dark:text-orange-400/80',
+						]}
+					>
+						{item.highlight}
+					</p>
+					<p class="text-[0.9375rem] leading-[1.65] text-slate-600 dark:text-slate-400">{item.desc}</p>
+				</div>
+
+				<span
+					class:list={[
+						'inline-flex items-center gap-1.5 text-sm font-medium transition group-hover:gap-2',
+						item.tone === 'blue' && 'text-brand dark:text-blue-400',
+						item.tone === 'warm' && 'text-warm dark:text-orange-400',
+					]}
+				>
+					{item.cta}
+					<svg class="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true">
+						<path d="M5 12h14M13 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round" />
+					</svg>
+				</span>
+			</a>
+		))
+	}
+</section>

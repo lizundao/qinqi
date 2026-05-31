@@ -1,0 +1,40 @@
+---
+import SiteNav from '../components/SiteNav.astro';
+import SiteFooter from '../components/SiteFooter.astro';
+import '../styles/global.css';
+
+interface Props {
+	title: string;
+	description?: string;
+}
+
+const { title, description = '中国亲戚关系计算器' } = Astro.props;
+const pageTitle = title === '亲戚百科' ? title : `${title} | 亲戚百科`;
+---
+
+<!doctype html>
+<html lang="zh-CN">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<title>{pageTitle}</title>
+		<meta name="description" content={description} />
+		<link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+		<script is:inline>
+			(() => {
+				const key = 'starlight-theme';
+				const stored = typeof localStorage !== 'undefined' ? localStorage.getItem(key) : null;
+				const theme =
+					stored || (matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark');
+				document.documentElement.dataset.theme = theme === 'light' ? 'light' : 'dark';
+			})();
+		</script>
+	</head>
+	<body class="flex min-h-screen flex-col bg-slate-50 dark:bg-slate-950">
+		<SiteNav />
+		<main class="mx-auto w-full max-w-[90rem] flex-1 px-4 py-8 pb-16 sm:px-6 lg:py-12">
+			<slot />
+		</main>
+		<SiteFooter />
+	</body>
+</html>

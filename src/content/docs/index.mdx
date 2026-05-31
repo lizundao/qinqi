@@ -1,39 +1,42 @@
 ---
 title: 亲戚百科
-description: 中国亲戚关系计算器与科普文章，帮你搞清称呼、理解习俗。
+description: 中国亲戚关系计算器与亲戚常识，帮你搞清称呼、理解习俗。
 template: splash
 hero:
-  tagline: 算称呼，读懂中国亲戚文化
-  image:
-    file: ../../assets/logo.svg
-    alt: 亲戚百科
+  tagline: 逢年过节走亲戚，不再为称呼发愁。<br/>算关系、读常识，读懂中国式亲戚文化。
   actions:
-    - text: 在线计算器
+    - text: 打开计算器
       link: /calc/
       icon: right-arrow
-    - text: 阅读科普文章
-      link: /articles/why-niangqin-jiuda/
+    - text: 阅读亲戚常识
+      link: /articles/
       icon: document
       variant: minimal
 ---
 
-import { Card, CardGrid } from '@astrojs/starlight/components';
+import HomeFeatures from '../../components/HomeFeatures.astro';
+import ArticleList from '../../components/ArticleList.astro';
 
-## 这个网站做什么
+<div class="home-body not-content">
+	<HomeFeatures />
 
-<CardGrid stagger>
-	<Card title="亲戚关系计算器" icon="rocket">
-		输入「妈妈的妈妈的兄弟」或「七舅姥爷」，在浏览器本地即时算出称呼，支持反向查询与自然语言。
-		[立即使用 →](/calc/)
-	</Card>
-	<Card title="科普文章" icon="open-book">
-		解读「娘亲舅大」等习俗典故，辨析堂表、侄甥等容易混淆的称呼。
-		[开始阅读 →](/articles/why-niangqin-jiuda/)
-	</Card>
-	<Card title="轻量静态站点" icon="setting">
-		科普文章以 Markdown 编写，构建为静态 HTML，适合部署到 Cloudflare Pages。
-	</Card>
-	<Card title="开源算法" icon="github">
-		计算器基于 [relationship.js](https://github.com/mumuy/relationship)（MIT），感谢原作者维护亲戚关系数据。
-	</Card>
-</CardGrid>
+	<section class="mt-16 flex flex-col gap-6 border-t border-slate-200/70 pt-12 pb-14 md:mt-24 md:gap-8 md:pt-16 md:pb-20 dark:border-slate-800/80">
+		<div class="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+			<div class="space-y-1">
+				<p class="text-xs font-semibold tracking-wide text-brand dark:text-blue-400">推荐阅读</p>
+				<h2 class="text-xl font-bold tracking-tight text-slate-900 md:text-[1.375rem] dark:text-slate-100">亲戚常识</h2>
+				<p class="max-w-lg text-sm leading-relaxed text-slate-500 dark:text-slate-400">习俗典故、称呼辨析，帮你弄懂中国亲戚文化。</p>
+			</div>
+			<a
+				href="/articles/"
+				class="inline-flex shrink-0 items-center gap-1 text-[0.8125rem] font-semibold text-brand no-underline hover:underline dark:text-blue-400"
+			>
+				<span>查看全部</span>
+				<svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true">
+					<path d="M5 12h14M13 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round" />
+				</svg>
+			</a>
+		</div>
+		<ArticleList compact grid />
+	</section>
+</div>

@@ -1,0 +1,13 @@
+---
+import lightSvg from '../assets/hero-family-network.svg?raw';
+import darkSvg from '../assets/hero-family-network-dark.svg?raw';
+---
+
+<div
+	class="qq-hero-illus w-full drop-shadow-[0_16px_40px_rgba(37,99,235,0.2)] dark:drop-shadow-[0_16px_40px_rgba(37,99,235,0.15)]"
+	role="img"
+	aria-label="亲戚关系网络示意图"
+>
+	<div class="block dark:hidden [&_svg]:block [&_svg]:h-auto [&_svg]:w-full" set:html={lightSvg} />
+	<div class="hidden dark:block [&_svg]:block [&_svg]:h-auto [&_svg]:w-full" set:html={darkSvg} />
+</div>

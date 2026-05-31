@@ -8,7 +8,7 @@ description: 关于亲戚百科站点与开源致谢。
 **qinqi.wiki** 是一个围绕中国亲戚称谓的轻量网站，包含两部分：
 
 1. **在线计算器** — 基于 [relationship.js](https://github.com/mumuy/relationship) 在浏览器端计算称呼
-2. **科普文章** — 解读习俗、历史与称呼背后的文化逻辑
+2. **亲戚常识** — 解读习俗、历史与称呼背后的文化逻辑
 
 ## 开源致谢
 
@@ -34,7 +34,7 @@ npm run build
 
 ## 写文章
 
-科普文章放在 `src/content/docs/articles/`，文件名即 URL 路径，无需在 frontmatter 里写 slug。
+亲戚常识文章放在 `src/content/docs/articles/`，使用 `.mdx` 格式，文件名即 URL 路径，无需在 frontmatter 里写 slug。
 
 ```yaml
 ---

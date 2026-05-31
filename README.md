@@ -25,12 +25,15 @@ npm run preview
 
 产物在 `dist/`，纯静态 HTML，可部署到 Cloudflare Pages。
 
-## Cloudflare Pages
+详细步骤见 **[docs/deploy-cloudflare-pages.md](./docs/deploy-cloudflare-pages.md)**（Git 自动部署、自定义域名、CLI、常见问题）。
+
+## Cloudflare Pages（速查）
 
 | 配置 | 值 |
 | --- | --- |
 | Build command | `npm run build` |
 | Output directory | `dist` |
+| Node 版本（环境变量） | `NODE_VERSION=20` |
 
 ## 写文章
 
