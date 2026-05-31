@@ -23,54 +23,80 @@ npm run build
 
 ## 二、通过 Git 自动部署（推荐）
 
-每次推送到主分支，Cloudflare 会自动拉代码、构建并发布。
+Cloudflare 现在默认使用 **Workers Builds**（`Create application` → `Import a repository`），分为两步：
 
-### 1. 创建 Pages 项目
+1. **Build command** — 构建项目（生成 `dist/`）
+2. **Deploy command** — 用 Wrangler 上传并发布（必填）
+
+> 若你看到的是旧版 **Pages → Connect to Git**，只需填 Build command 和 Output directory，没有 Deploy command 字段。
+
+### 1. 创建项目
 
 1. 登录 [Cloudflare Dashboard](https://dash.cloudflare.com/)
-2. 左侧选择 **Workers & Pages**
-3. 点击 **Create** → **Pages** → **Connect to Git**
-4. 授权 GitHub / GitLab，选择仓库 `qinqi`
-5. 点击 **Begin setup**
+2. 进入 **Workers & Pages** → **Create application**
+3. 选择 **Import a repository**（导入 Git 仓库）
+4. 授权 GitHub，选择仓库 `qinqi`
+5. 进入 **Set up your application**
 
-### 2. 构建设置
+### 2. 填写构建与部署命令（Workers Builds）
 
-在 **Build settings** 页面填写：
-
-| 配置项 | 值 |
+| 配置项 | 填什么 |
 | --- | --- |
-| **Production branch** | `main`（或你的默认分支名） |
-| **Framework preset** | `Astro`（或选 None 手动填） |
+| **Production branch** | `main` |
 | **Build command** | `npm run build` |
-| **Build output directory** | `dist` |
+| **Deploy command** | `npx wrangler deploy` |
+| **Root directory** | 留空 |
 
-> 若列表里没有 Astro，选 **None**，手动填入上表命令和输出目录即可。
+**非生产分支 Deploy command**（Preview，可选，默认即可）：
 
-### 3. 环境变量（建议）
+```bash
+npx wrangler versions upload
+```
 
-展开 **Environment variables**，添加：
+### 3. wrangler.jsonc（仓库已包含）
+
+项目根目录已有 `wrangler.jsonc`，告诉 Wrangler 静态文件在 `dist/`：
+
+```jsonc
+{
+  "name": "qinqi",
+  "compatibility_date": "2026-05-31",
+  "assets": {
+    "directory": "./dist"
+  }
+}
+```
+
+**重要**：Dashboard 里创建的应用名称，必须与 `wrangler.jsonc` 里的 `"name": "qinqi"` 一致，否则部署会失败。
+
+### 4. 环境变量（建议）
+
+在 **Settings → Variables & Secrets** 或构建配置里添加：
 
 | 变量名 | 值 | 说明 |
 | --- | --- | --- |
-| `NODE_VERSION` | `20` | Astro 6 建议使用 Node 20 |
+| `NODE_VERSION` | `20` | Astro 6 建议 Node 20 |
 
-Production 和 Preview 环境都建议设置。
+### 5. 保存并部署
 
-### 4. 保存并部署
-
-点击 **Save and Deploy**。首次构建约 1～3 分钟。
-
-成功后 Cloudflare 会分配临时域名，例如：
+点击 **Save and Deploy**。流程为：
 
 ```
-https://qinqi.pages.dev
+git push → npm install → npm run build → npx wrangler deploy → 上线
 ```
 
-### 5. 查看部署状态
+---
 
-- **Workers & Pages** → 你的项目 → **Deployments**
-- 每次 Git 推送都会生成一条部署记录
-- 绿色 ✓ 表示成功；失败可点进日志查看报错
+### 附：旧版 Cloudflare Pages 界面
+
+若界面是 **Pages** 标签下的 **Connect to Git**，填法如下（无 Deploy command）：
+
+| 配置项 | 值 |
+| --- | --- |
+| **Build command** | `npm run build` |
+| **Build output directory** | `dist` |
+
+参考：[Cloudflare Astro 指南（Pages）](https://developers.cloudflare.com/pages/framework-guides/deploy-an-astro-site/)
 
 ---
 
@@ -98,23 +124,14 @@ https://qinqi.pages.dev
 
 ## 五、本地 CLI 部署（可选）
 
-不连 Git、手动上传 `dist/` 时可用 [Wrangler](https://developers.cloudflare.com/workers/wrangler/)：
-
 ```bash
-# 安装 Wrangler
-npm install -g wrangler
-
-# 登录 Cloudflare
-wrangler login
-
-# 本地构建
+npm install
 npm run build
-
-# 部署到 Pages（项目名需与 Dashboard 中一致）
-npx wrangler pages deploy dist --project-name=qinqi
+npx wrangler login    # 首次需要
+npx wrangler deploy
 ```
 
-首次使用需在 Cloudflare 中已创建同名 Pages 项目。
+参考：[Cloudflare Astro 指南（Workers）](https://developers.cloudflare.com/workers/framework-guides/web-apps/astro/)
 
 ---
 
@@ -178,5 +195,6 @@ npm run preview
 
 - 在线站点：https://qinqi.wiki
 - 源码仓库：https://github.com/lizundao/qinqi
-- [Cloudflare Pages 文档](https://developers.cloudflare.com/pages/)
-- [Astro 部署文档](https://docs.astro.build/en/guides/deploy/cloudflare/)
+- [Cloudflare Workers Builds 配置](https://developers.cloudflare.com/workers/ci-cd/builds/configuration/)
+- [Cloudflare Astro 部署（Workers）](https://developers.cloudflare.com/workers/framework-guides/web-apps/astro/)
+- [Cloudflare Pages Astro 指南（旧版）](https://developers.cloudflare.com/pages/framework-guides/deploy-an-astro-site/)

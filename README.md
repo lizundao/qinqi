@@ -27,13 +27,15 @@ npm run preview
 
 详细步骤见 **[docs/deploy-cloudflare-pages.md](./docs/deploy-cloudflare-pages.md)**（Git 自动部署、自定义域名、CLI、常见问题）。
 
-## Cloudflare Pages（速查）
+## Cloudflare 部署（速查 · Workers Builds）
 
 | 配置 | 值 |
 | --- | --- |
 | Build command | `npm run build` |
-| Output directory | `dist` |
+| Deploy command | `npx wrangler deploy` |
 | Node 版本（环境变量） | `NODE_VERSION=20` |
+
+应用名称需与 `wrangler.jsonc` 中的 `"name": "qinqi"` 一致。
 
 ## 写文章
 
