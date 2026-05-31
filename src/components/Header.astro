@@ -1,63 +1,10 @@
 ---
-import config from 'virtual:starlight/user-config';
-import LanguageSelect from 'virtual:starlight/components/LanguageSelect';
-import Search from 'virtual:starlight/components/Search';
-import SiteTitle from 'virtual:starlight/components/SiteTitle';
-import SocialIcons from 'virtual:starlight/components/SocialIcons';
-import ThemeSelect from 'virtual:starlight/components/ThemeSelect';
-
-const shouldRenderSearch =
-	config.pagefind || config.components.Search !== '@astrojs/starlight/components/Search.astro';
-
-const navItems = [
-	{ label: '在线计算器', href: '/calc/' },
-	{ label: '亲戚常识', href: '/articles/' },
-];
-
-const pathname = Astro.url.pathname.replace(/\/$/, '') || '/';
-
-function isActive(href: string) {
-	const target = href.replace(/\/$/, '') || '/';
-	if (target === '/articles') {
-		return pathname === '/articles' || pathname.startsWith('/articles/');
-	}
-	return pathname === target;
-}
-
-const linkBase =
-	'rounded-full px-3 py-1.5 text-sm font-medium text-slate-500 no-underline whitespace-nowrap transition hover:bg-slate-100 hover:text-slate-900 dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-slate-100 max-[49.9rem]:px-2 max-[49.9rem]:py-1 max-[49.9rem]:text-[0.82rem]';
-const linkActive =
-	'bg-blue-50 font-semibold text-brand-dark dark:bg-blue-950/50 dark:text-blue-300';
+import SiteHeader from './SiteHeader.astro';
+import PagefindSearch from './PagefindSearch.astro';
+import ThemeToggle from './ThemeToggle.astro';
 ---
 
-<div class="header flex h-full w-full items-center gap-3 max-[49.9rem]:flex-wrap max-[49.9rem]:gap-y-1.5">
-	<div class="title-wrapper sl-flex min-w-0 flex-none overflow-clip p-1 -m-1 max-[49.9rem]:flex-1">
-		<SiteTitle />
-	</div>
-
-	<div class="header-spacer min-w-0 flex-1 max-[49.9rem]:hidden" aria-hidden="true"></div>
-
-	<div class="header-end sl-flex flex-none items-center gap-2.5 print:hidden max-[49.9rem]:w-full max-[49.9rem]:justify-end">
-		{shouldRenderSearch && (
-			<div class="header-search sl-flex shrink-0 items-stretch max-[49.9rem]:order-3 max-[49.9rem]:mr-auto">
-				<Search />
-			</div>
-		)}
-		<nav class="top-nav sl-flex items-center gap-0.5" aria-label="主导航">
-			{
-				navItems.map((item) => (
-					<a href={item.href} class:list={[linkBase, isActive(item.href) && linkActive]}>
-						{item.label}
-					</a>
-				))
-			}
-		</nav>
-		<div class="header-tools sl-flex items-center gap-3.5 max-[49.9rem]:[&_starlight-theme-select]:hidden max-[49.9rem]:[&_starlight-lang-select]:hidden">
-			<div class="social-icons sl-flex items-center gap-4 after:h-8 after:border-e after:border-slate-300 dark:after:border-slate-600">
-				<SocialIcons />
-			</div>
-			<ThemeSelect />
-			<LanguageSelect />
-		</div>
-	</div>
-</div>
+<SiteHeader>
+	<PagefindSearch slot="search" />
+	<ThemeToggle slot="theme" />
+</SiteHeader>

@@ -22,7 +22,6 @@ export default defineConfig({
         starlight({
             components: {
                 Header: './src/components/Header.astro',
-                Hero: './src/components/Hero.astro',
                 PageFrame: './src/components/PageFrame.astro',
             },
             title: '亲戚百科',
@@ -49,12 +48,7 @@ export default defineConfig({
             ],
             customCss: ['./src/styles/global.css'],
             pagination: false,
-            sidebar: [
-                {
-                    label: '关于',
-                    slug: 'about',
-                },
-            ],
+            sidebar: [],
             head: [
                 {
                     tag: 'meta',

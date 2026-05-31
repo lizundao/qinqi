@@ -1,9 +1,9 @@
 ---
 title: 关于
 description: 关于亲戚百科站点与开源致谢。
+sidebar:
+  hidden: true
 ---
-
-## 关于亲戚百科
 
 **qinqi.wiki** 是一个围绕中国亲戚称谓的轻量网站，包含两部分：
 
@@ -19,22 +19,18 @@ description: 关于亲戚百科站点与开源致谢。
 
 ## 部署
 
-本站为静态站点，构建命令：
-
-```bash
-npm run build
-```
-
-产物目录 `dist/` 可直接部署到 Cloudflare Pages 或其他静态托管。
+本站为 Astro 静态站点，构建产物在 `dist/` 目录。
 
 | 配置项 | 值 |
 | --- | --- |
 | Build command | `npm run build` |
-| Output directory | `dist` |
+| Deploy command | `npx wrangler deploy` |
+
+详细步骤见仓库 [docs/deploy-cloudflare-pages.md](https://github.com/lizundao/qinqi/blob/main/docs/deploy-cloudflare-pages.md)。
 
 ## 写文章
 
-亲戚常识文章放在 `src/content/docs/articles/`，使用 `.mdx` 格式，文件名即 URL 路径，无需在 frontmatter 里写 slug。
+亲戚常识文章放在 `src/content/docs/articles/`，使用 `.mdx` 格式，文件名即 URL 路径。
 
 ```yaml
 ---
@@ -42,6 +38,6 @@ title: 文章标题
 description: 摘要，用于 SEO
 date: 2026-05-31
 tags: [习俗, 舅舅]
-draft: false   # true 时仅在开发环境可见
+draft: false
 ---
 ```

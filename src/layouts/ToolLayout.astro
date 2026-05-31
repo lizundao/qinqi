@@ -1,14 +1,18 @@
 ---
-import SiteNav from '../components/SiteNav.astro';
 import SiteFooter from '../components/SiteFooter.astro';
+import SiteHeader from '../components/SiteHeader.astro';
+import PagefindSearch from '../components/PagefindSearch.astro';
+import ThemeToggle from '../components/ThemeToggle.astro';
 import '../styles/global.css';
 
 interface Props {
 	title: string;
 	description?: string;
+	variant?: 'default' | 'home';
 }
 
-const { title, description = '中国亲戚关系计算器' } = Astro.props;
+const { title, description = '中国亲戚关系计算器', variant = 'default' } = Astro.props;
+const isHome = variant === 'home';
 const pageTitle = title === '亲戚百科' ? title : `${title} | 亲戚百科`;
 ---
 
@@ -20,6 +24,7 @@ const pageTitle = title === '亲戚百科' ? title : `${title} | 亲戚百科`;
 		<title>{pageTitle}</title>
 		<meta name="description" content={description} />
 		<link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+		<link rel="stylesheet" href="/pagefind/pagefind-ui.css" />
 		<script is:inline>
 			(() => {
 				const key = 'starlight-theme';
@@ -31,8 +36,18 @@ const pageTitle = title === '亲戚百科' ? title : `${title} | 亲戚百科`;
 		</script>
 	</head>
 	<body class="flex min-h-screen flex-col bg-slate-50 dark:bg-slate-950">
-		<SiteNav />
-		<main class="mx-auto w-full max-w-[90rem] flex-1 px-4 py-8 pb-16 sm:px-6 lg:py-12">
+		<header class="header">
+			<SiteHeader>
+				<PagefindSearch slot="search" />
+				<ThemeToggle slot="theme" />
+			</SiteHeader>
+		</header>
+		<main
+			class:list={[
+				'mx-auto w-full flex-1',
+				isHome ? 'max-w-none px-0 py-0' : 'max-w-[90rem] px-4 py-8 pb-16 sm:px-6 lg:py-12',
+			]}
+		>
 			<slot />
 		</main>
 		<SiteFooter />

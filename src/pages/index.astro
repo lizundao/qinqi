@@ -1,0 +1,55 @@
+---
+import ToolLayout from '../layouts/ToolLayout.astro';
+import HomeHero from '../components/HomeHero.astro';
+import HomeFeatures from '../components/HomeFeatures.astro';
+import ArticleList from '../components/ArticleList.astro';
+---
+
+<ToolLayout
+	title="亲戚百科"
+	description="中国亲戚关系计算器与亲戚常识，帮你搞清称呼、理解习俗。"
+	variant="home"
+>
+	<section class="home-hero border-b border-slate-200/70 dark:border-slate-800/80">
+		<div class="home-hero__inner mx-auto max-w-[68rem] px-4 py-10 sm:px-6 lg:py-16">
+			<HomeHero />
+		</div>
+	</section>
+
+	<div class="home-body mx-auto w-full max-w-[68rem] px-4 pb-16 pt-12 sm:px-6 md:pt-16 lg:pb-20">
+		<HomeFeatures />
+
+		<section
+			class="mt-16 flex flex-col gap-6 border-t border-slate-200/70 pt-12 md:mt-24 md:gap-8 md:pt-16 dark:border-slate-800/80"
+		>
+			<div class="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+				<div class="space-y-1">
+					<p class="text-xs font-semibold tracking-wide text-brand dark:text-blue-400">推荐阅读</p>
+					<h2 class="text-xl font-bold tracking-tight text-slate-900 md:text-[1.375rem] dark:text-slate-100">
+						亲戚常识
+					</h2>
+					<p class="max-w-lg text-sm leading-relaxed text-slate-500 dark:text-slate-400">
+						习俗典故、称呼辨析，帮你弄懂中国亲戚文化。
+					</p>
+				</div>
+				<a
+					href="/articles/"
+					class="inline-flex shrink-0 items-center gap-1 text-[0.8125rem] font-semibold text-brand no-underline hover:underline dark:text-blue-400"
+				>
+					<span>查看全部</span>
+					<svg
+						class="h-4 w-4"
+						viewBox="0 0 24 24"
+						fill="none"
+						stroke="currentColor"
+						stroke-width="2.5"
+						aria-hidden="true"
+					>
+						<path d="M5 12h14M13 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round" />
+					</svg>
+				</a>
+			</div>
+			<ArticleList compact grid />
+		</section>
+	</div>
+</ToolLayout>

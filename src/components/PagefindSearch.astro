@@ -1,0 +1,141 @@
+<div class="header-search flex shrink-0 items-stretch max-[49.9rem]:order-3 max-[49.9rem]:mr-auto">
+	<site-search class="block w-full" data-translations={JSON.stringify({ placeholder: '搜索' })}>
+		<button
+			type="button"
+			data-open-modal
+			disabled
+			aria-label="搜索"
+			aria-keyshortcuts="Control+K"
+		>
+			<svg class="h-4 w-4 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+				<circle cx="11" cy="11" r="7"></circle>
+				<path d="M20 20l-3.5-3.5" stroke-linecap="round"></path>
+			</svg>
+			<span class="hidden md:inline" aria-hidden="true">搜索</span>
+			<kbd class="hidden md:inline-flex" style="display: none;">
+				<kbd>Ctrl</kbd><kbd>K</kbd>
+			</kbd>
+		</button>
+		<dialog style="padding:0" aria-label="搜索">
+			<div class="dialog-frame flex">
+				<button type="button" data-close-modal class="flex md:hidden">取消</button>
+				<div class="search-container">
+					<div id="starlight__search"></div>
+				</div>
+			</div>
+		</dialog>
+	</site-search>
+</div>
+
+<script is:inline>
+	(() => {
+		const openBtn = document.querySelector('site-search button[data-open-modal]');
+		const shortcut = openBtn?.querySelector('kbd');
+		if (openBtn && shortcut instanceof HTMLElement) {
+			const platformKey = shortcut.querySelector('kbd');
+			if (platformKey && /(Mac|iPhone|iPod|iPad)/i.test(navigator.platform)) {
+				platformKey.textContent = '⌘';
+				openBtn.setAttribute('aria-keyshortcuts', 'Meta+K');
+			}
+			shortcut.style.display = '';
+		}
+
+		class SiteSearch extends HTMLElement {
+			constructor() {
+				super();
+				const openBtn = this.querySelector('button[data-open-modal]');
+				const closeBtn = this.querySelector('button[data-close-modal]');
+				const dialog = this.querySelector('dialog');
+				const dialogFrame = this.querySelector('.dialog-frame');
+				if (!openBtn || !closeBtn || !dialog || !dialogFrame) return;
+
+				const onClick = (event) => {
+					const isLink = event.target && 'href' in event.target;
+					if (
+						isLink ||
+						(document.body.contains(event.target) && !dialogFrame.contains(event.target))
+					) {
+						closeModal();
+					}
+				};
+
+				const openModal = (event) => {
+					dialog.showModal();
+					document.body.toggleAttribute('data-search-modal-open', true);
+					this.querySelector('input')?.focus();
+					event?.stopPropagation();
+					window.addEventListener('click', onClick);
+				};
+
+				const closeModal = () => dialog.close();
+
+				openBtn.addEventListener('click', openModal);
+				openBtn.disabled = false;
+				closeBtn.addEventListener('click', closeModal);
+
+				dialog.addEventListener('close', () => {
+					document.body.toggleAttribute('data-search-modal-open', false);
+					window.removeEventListener('click', onClick);
+				});
+
+				window.addEventListener('keydown', (e) => {
+					if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+						e.preventDefault();
+						openModal();
+					}
+				});
+
+				const onIdle = window.requestIdleCallback || ((cb) => setTimeout(cb, 1));
+				onIdle(async () => {
+					try {
+						const { PagefindUI } = await import('/pagefind/pagefind-ui.js');
+						new PagefindUI({ element: '#starlight__search' });
+					} catch {
+						/* pagefind unavailable in dev */
+					}
+				});
+			}
+		}
+
+		if (!customElements.get('site-search')) {
+			customElements.define('site-search', SiteSearch);
+		}
+	})();
+</script>
+
+<style is:global>
+	site-search button[data-open-modal] {
+		display: flex;
+		align-items: center;
+		gap: 0.5rem;
+		width: 100%;
+		cursor: pointer;
+	}
+
+	site-search dialog {
+		margin: auto;
+		max-width: 36rem;
+		width: calc(100% - 2rem);
+		border: none;
+		border-radius: 0.75rem;
+		background: transparent;
+	}
+
+	site-search dialog::backdrop {
+		background: rgb(15 23 42 / 0.45);
+	}
+
+	site-search .dialog-frame {
+		flex-direction: column;
+		gap: 0.75rem;
+		border-radius: 0.75rem;
+		border: 1px solid rgb(226 232 240 / 0.9);
+		background: white;
+		padding: 1rem;
+	}
+
+	html[data-theme='dark'] site-search .dialog-frame {
+		border-color: rgb(51 65 85 / 0.9);
+		background: rgb(15 23 42);
+	}
+</style>
