@@ -1,5 +1,7 @@
 ---
-import { getArticles, getArticleHref } from '../utils/articles';
+import { getArticles, getArticleHref, isDraftEntry } from '../utils/articles';
+
+const showDraftBadge = import.meta.env.DEV;
 
 interface Props {
 	showHeader?: boolean;
@@ -97,6 +99,13 @@ const isHomeGrid = compact && grid;
 											{formatDate(article.data.date)}
 										</time>
 									)}
+									{
+										showDraftBadge && isDraftEntry(article) && (
+											<span class="inline-flex items-center rounded-full bg-amber-100 px-2 py-0.5 text-[0.6875rem] font-medium text-amber-800 dark:bg-amber-950/60 dark:text-amber-300">
+												草稿
+											</span>
+										)
+									}
 									{
 										article.data.tags?.map((tag) => (
 											<span

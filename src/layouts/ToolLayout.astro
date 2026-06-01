@@ -14,6 +14,8 @@ interface Props {
 const { title, description = '中国亲戚关系计算器', variant = 'default' } = Astro.props;
 const isHome = variant === 'home';
 const pageTitle = title === '亲戚百科' ? title : `${title} | 亲戚百科`;
+/** Pagefind 索引仅在 build 后生成，dev 不加载以免 404 */
+const pagefindEnabled = import.meta.env.PROD;
 ---
 
 <!doctype html>
@@ -24,7 +26,7 @@ const pageTitle = title === '亲戚百科' ? title : `${title} | 亲戚百科`;
 		<title>{pageTitle}</title>
 		<meta name="description" content={description} />
 		<link rel="icon" href="/favicon.svg" type="image/svg+xml" />
-		<link rel="stylesheet" href="/pagefind/pagefind-ui.css" />
+		{pagefindEnabled && <link rel="stylesheet" href="/pagefind/pagefind-ui.css" />}
 		<script is:inline>
 			(() => {
 				const key = 'starlight-theme';
@@ -45,7 +47,7 @@ const pageTitle = title === '亲戚百科' ? title : `${title} | 亲戚百科`;
 		<main
 			class:list={[
 				'mx-auto w-full flex-1',
-				isHome ? 'max-w-none px-0 py-0' : 'max-w-[90rem] px-4 py-8 pb-16 sm:px-6 lg:py-12',
+				isHome ? 'max-w-none px-0 py-0' : 'site-container py-8 pb-16 lg:py-12',
 			]}
 		>
 			<slot />

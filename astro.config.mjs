@@ -1,5 +1,7 @@
 // @ts-check
 import { defineConfig } from 'astro/config';
+import { unified } from '@astrojs/markdown-remark';
+import mdx from '@astrojs/mdx';
 import starlight from '@astrojs/starlight';
 
 import tailwindcss from '@tailwindcss/vite';
@@ -7,6 +9,12 @@ import tailwindcss from '@tailwindcss/vite';
 // https://astro.build/config
 export default defineConfig({
     site: 'https://qinqi.wiki',
+    markdown: {
+        processor: unified({
+            gfm: true,
+            smartypants: true,
+        }),
+    },
     vite: {
       optimizeDeps: {
           include: ['relationship.js'],
@@ -25,7 +33,7 @@ export default defineConfig({
                 PageFrame: './src/components/PageFrame.astro',
             },
             title: '亲戚百科',
-            description: '中国亲戚关系计算器与亲戚常识文章',
+            description: '帮现代人搞清亲戚称呼、读懂亲缘分寸。含关系计算器与亲戚常识，辨别亲疏、珍重亲情。',
             logo: {
                 light: './src/assets/logo.svg',
                 dark: './src/assets/logo-dark.svg',
@@ -74,5 +82,7 @@ export default defineConfig({
                 },
             ],
         }),
+        // 放在 Starlight 之后，且 optimize: false，否则 MDX 表格会变成纯文本
+        mdx({ gfm: true, optimize: false }),
     ],
 });

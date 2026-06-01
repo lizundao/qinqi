@@ -1,8 +1,8 @@
 ---
-import { render } from 'astro:content';
 import ToolLayout from '../../layouts/ToolLayout.astro';
 import ArticleDetail from '../../components/ArticleDetail.astro';
 import { getArticleBySlug, getArticleSlug, getArticles } from '../../utils/articles';
+import { renderArticleMarkdown } from '../../utils/renderArticleMarkdown';
 
 export async function getStaticPaths() {
 	const articles = await getArticles();
@@ -19,7 +19,7 @@ if (!entry) {
 	return Astro.redirect('/404');
 }
 
-const { Content } = await render(entry);
+const articleHtml = await renderArticleMarkdown(entry);
 ---
 
 <ToolLayout title={entry.data.title} description={entry.data.description}>
@@ -29,6 +29,6 @@ const { Content } = await render(entry);
 		date={entry.data.date}
 		tags={entry.data.tags}
 	>
-		<Content />
+		<div set:html={articleHtml} />
 	</ArticleDetail>
 </ToolLayout>

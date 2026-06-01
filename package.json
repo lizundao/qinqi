@@ -4,11 +4,12 @@
   "version": "0.0.1",
   "scripts": {
     "dev": "astro dev",
-    "dev:clean": "rm -rf node_modules/.vite && astro dev",
+    "dev:clean": "rm -rf .astro node_modules/.vite && astro dev",
     "start": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
-    "astro": "astro"
+    "astro": "astro",
+    "article:ai": "node scripts/generate-article.mjs"
   },
   "dependencies": {
     "@astrojs/starlight": "^0.39.2",

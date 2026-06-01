@@ -8,7 +8,7 @@ interface Props {
 
 const {
 	title = '亲戚百科',
-	tagline = '逢年过节走亲戚，不再为称呼发愁。<br/>算关系、读常识，读懂中国式亲戚文化。',
+	tagline = '家族圈子越来越小，有的孩子连表亲都认不全，逢年过节的称呼也张口结舌。<br/>亲戚百科帮你搞清叫法、读懂亲缘——辨别亲疏、理智看待血缘、珍重亲情、注重日常相处。',
 } = Astro.props;
 
 const actions = [
@@ -30,7 +30,7 @@ const actions = [
 				class="inline-flex items-center gap-2 rounded-full border border-blue-200/80 bg-blue-50/80 px-3.5 py-1 text-xs font-semibold tracking-wide text-brand-dark dark:border-blue-800/60 dark:bg-blue-950/50 dark:text-blue-300"
 			>
 				<span class="h-1.5 w-1.5 rounded-full bg-brand dark:bg-blue-400"></span>
-				中国亲戚关系 · 浏览器本地计算
+				称呼不求人 · 浏览器本地计算
 			</span>
 			<h1
 				class="max-w-[14ch] text-[clamp(2rem,calc(0.5rem+5vw),3.75rem)] font-bold leading-[1.12] tracking-tight text-slate-900 dark:text-white"
@@ -43,7 +43,7 @@ const actions = [
 			/>
 			<ul class="flex flex-wrap justify-center gap-2 lg:justify-start">
 				{
-					['本地计算', '反向查询', '自然语言'].map((item) => (
+					['搞清称呼', '读懂亲疏', '体面走亲戚'].map((item) => (
 						<li class="rounded-full bg-slate-100/90 px-3 py-1 text-xs font-medium text-slate-600 dark:bg-slate-800/80 dark:text-slate-300">
 							{item}
 						</li>

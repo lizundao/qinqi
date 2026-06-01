@@ -1,5 +1,14 @@
+---
+/** 与 ToolLayout 一致：仅生产构建后有 /pagefind 资源 */
+const pagefindEnabled = import.meta.env.PROD;
+---
+
 <div class="header-search flex shrink-0 items-stretch max-[49.9rem]:order-3 max-[49.9rem]:mr-auto">
-	<site-search class="block w-full" data-translations={JSON.stringify({ placeholder: '搜索' })}>
+	<site-search
+		class="block w-full"
+		data-pagefind={pagefindEnabled ? 'true' : 'false'}
+		data-translations={JSON.stringify({ placeholder: '搜索' })}
+	>
 		<button
 			type="button"
 			data-open-modal
@@ -85,13 +94,22 @@
 					}
 				});
 
+				if (this.dataset.pagefind !== 'true') {
+					const hint = this.querySelector('#starlight__search');
+					if (hint) {
+						hint.innerHTML =
+							'<p class="p-2 text-sm leading-relaxed text-slate-500 dark:text-slate-400">开发模式下暂无搜索索引。请先 <code class="rounded bg-slate-100 px-1 dark:bg-slate-800">npm run build && npm run preview</code> 再试。</p>';
+					}
+					return;
+				}
+
 				const onIdle = window.requestIdleCallback || ((cb) => setTimeout(cb, 1));
 				onIdle(async () => {
 					try {
 						const { PagefindUI } = await import('/pagefind/pagefind-ui.js');
 						new PagefindUI({ element: '#starlight__search' });
 					} catch {
-						/* pagefind unavailable in dev */
+						/* pagefind 未就绪 */
 					}
 				});
 			}

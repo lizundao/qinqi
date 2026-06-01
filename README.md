@@ -39,7 +39,16 @@ npm run preview
 
 ## 写文章
 
-在 `src/content/docs/articles/` 新建 `.md` 文件，文件名即 URL 路径（无需 slug）。
+在 `src/content/docs/articles/` 新建 `.md` 或 `.mdx` 文件，文件名即 URL 路径（无需 slug）。
+
+### AI 写作（可配置 API，推荐硅基流动）
+
+```bash
+cp .env.example .env   # 填入 ARTICLE_AI_API_KEY / BASE_URL / MODEL
+npm run article:ai -- "帮我写篇关于成语举案齐眉的文章"
+```
+
+默认 `draft: true`，本地 `npm run dev` 预览后再改 `draft: false` 发布。详见 **[docs/ai-writing.md](./docs/ai-writing.md)**。
 
 ```yaml
 ---

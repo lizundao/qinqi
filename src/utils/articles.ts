@@ -10,8 +10,18 @@ export function getArticleSlug(entry: ArticleEntry) {
 	return slug;
 }
 
+/** draft 文章仅在开发环境展示；生产构建排除 */
+export function isDraftEntry(entry: ArticleEntry) {
+	return entry.data.draft === true;
+}
+
+export function isArticleVisible(entry: ArticleEntry) {
+	if (isDraftEntry(entry) && import.meta.env.PROD) return false;
+	return true;
+}
+
 export function isArticleEntry(entry: ArticleEntry) {
-	if (entry.data.draft === true) return false;
+	if (!isArticleVisible(entry)) return false;
 
 	const slug = getArticleSlug(entry);
 	if (!slug || INDEX_SLUGS.has(slug)) return false;
