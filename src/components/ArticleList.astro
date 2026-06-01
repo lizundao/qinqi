@@ -7,10 +7,13 @@ interface Props {
 	showHeader?: boolean;
 	compact?: boolean;
 	grid?: boolean;
+	/** 最多展示篇数（已按日期倒序） */
+	limit?: number;
 }
 
-const { showHeader = false, compact = false, grid = false } = Astro.props;
-const articles = await getArticles();
+const { showHeader = false, compact = false, grid = false, limit } = Astro.props;
+const allArticles = await getArticles();
+const articles = limit != null ? allArticles.slice(0, limit) : allArticles;
 
 function formatDate(date: Date | undefined) {
 	if (!date) return '';

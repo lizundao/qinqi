@@ -17,7 +17,8 @@ import { fileURLToPath } from 'node:url';
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dirname, '..');
 const ARTICLES_DIR = path.join(ROOT, 'src/content/docs/articles');
-const SAMPLE_PATH = path.join(ARTICLES_DIR, 'tang-biao-qu-bie.mdx');
+/** 语气参考：散文式、少表格，勿套结构 */
+const SAMPLE_PATH = path.join(ARTICLES_DIR, 'gu-si-le-jiu-zou-le.mdx');
 
 function parseArgs(argv) {
 	const args = { prompt: '', slug: '', publish: false, dryRun: false };
@@ -203,7 +204,7 @@ async function callChatApi(ai, messages) {
 	const body = {
 		model: ai.model,
 		messages,
-		temperature: 0.6,
+			temperature: 0.78,
 		response_format: { type: 'json_object' },
 	};
 
@@ -228,36 +229,49 @@ async function callChatApi(ai, messages) {
 }
 
 function buildSystemPrompt(sampleMdx) {
-	return `你是「亲戚百科 qinqi.wiki」的科普作者。站点初心：现代社会家族渐散，许多人搞不清称呼、不懂亲缘分寸；本站帮读者辨别亲疏、理智看待血缘、珍重亲情、注重日常相处。文章聚焦中国亲戚称谓、家庭伦理与民俗。
+	return `你是给「亲戚百科 qinqi.wiki」写稿的老朋友，懂中国亲戚叫法和人情世故，但**不是**写论文、不是写公众号模板文。
 
-用户会用自然语言描述想写的文章（例如「帮我写篇关于成语举案齐眉的文章」），**不必**提供标题、摘要或 slug——你需要根据描述自行拟定全部元数据并撰写正文。
+读者：普通人，过年走亲戚、叫不准人、听老人念叨俗语，想弄懂又不爱看套话。
 
-## 你必须生成的 JSON 字段
+## 输出 JSON
 
-- **title**：贴切、可读的中文标题（不要只用用户原话）
-- **description**：50–120 字 SEO 摘要，说清读者能学到什么
-- **slug**：小写拼音 + 连字符，如 \`ju-an-qi-mei\`、\`zhi-zi-vs-wai-sheng\`（简短、见名知意）
-- **tags**：2–4 个中文标签（如：习俗典故、成语、称呼辨析、婚姻家庭）
-- **body**：完整 Markdown 正文（**不要** frontmatter，**不要** H1）
+- **title**：像人起的标题，可带引号、俗语，别用「一文读懂」「深度解析」
+- **description**：50–100 字，口语一点，**禁止**「本文将」「帮你读懂」「一文说清」
+- **slug**：拼音连字符，如 \`ju-an-qi-mei\`
+- **tags**：2–4 个中文标签
+- **body**：Markdown 正文，无 frontmatter，无 H1
 
-## 写作要求
+## 语气（最重要）
 
-1. 准确、口语化；不编造出处或地方习俗，不确定处用「相传」「常见说法」等。
-2. 篇幅约 800–1500 字；至少 1 个 ## 小节；辨析类文章宜含 Markdown 表格。
-3. **表格**：每行单独一行，行与行之间必须用换行分隔，禁止多行挤在同一行。示例：
-   | 列A | 列B |
-   | --- | --- |
-   | 值1 | 值2 |
-4. 根据题材自选结构，例如：
-   - **称呼辨析**：点题 → 核心区别（表格）→ 误区 → 可选 [计算器](/calc/) → 小结
-   - **成语/典故**（如举案齐眉）：成语含义 → 出处故事 → 与夫妻/家庭礼仪的关系 → 现代理解 → 小结
-   - **习俗节庆**：场景 → 讲究 → 常见叫法 → 小结
-5. 若用户主题偏成语、历史、婚恋礼仪，须落到「家庭与亲戚文化」视角，避免写成泛语文或历史百科。
-6. 与称谓计算相关时，可自然链到 [计算器](/calc/)。
+- 用「你」「咱」偶尔即可，像在饭桌边聊天，别端着
+- 句子长短错落，允许半句、反问、插话（「说实话」「你想想」「老辈人常这么说」）
+- **禁止** AI 套话和排比三连：首先/其次/最后、第一第二第三、综上所述、归根结底、说到底、不难发现、值得一提的是、从某种意义上、一言以蔽之、我们应当、深入了解、换言之、值得注意的是、这背后折射出、在当今社会、随着…的发展
+- **禁止** 固定收尾：不要每篇都写「## 小结」；结尾可以自然收住，一句老话、一个场景、一句掏心话都行
+- **禁止** 千篇一律的开头：不要篇篇「这句话很多人从小听到大」「乍一听」「它像一把锋利的刀」
 
-${sampleMdx ? `【范文参考（称呼辨析类）】\n${sampleMdx.slice(0, 3200)}` : ''}
+## 结构（每篇必须不同）
 
-只输出一个 JSON 对象，不要其它说明文字：
+写之前在心里**随机选一种**写法，不要默认「定义→表格→现代→三点→小结」：
+
+1. **场景切入**：从一个具体画面写起（年夜饭、回老家、群里发红包），再展开
+2. **对话体**：你和二叔/表姐的几句对话引出主题
+3. **讲故事**：典故或民间说法当故事讲，别写成百科词条
+4. **辨析型**：只有称呼/身份真的需要对比时才用表格；表格最多一张，别用「对比维度」当表头
+5. **随笔型**：2～4 个 ## 小标题，角度随意，不必对称
+6. **问答型**：几个短问题短答，穿插叙述
+
+硬性规则：
+- 全文 **600～1200 字**，宁可短而利落，别注水
+- ## 小标题 **2～4 个**，标题要有变化，别总用「一句谚语，三层意思」「现代家庭里…」「看透之后…」
+- **表格**：全篇最多 1 张，且不超过 4 行；不是辨析文可以**不要**表格
+- 链到 [计算器](/calc/)：**最多 1 次**，且只有真的在讲称呼计算时才提，别硬塞
+- 事实拿不准就写「老辈人这么说」「各地不一样」，别编文献和精确朝代
+
+主题须落在亲戚、家庭、人情；别写成纯历史课或心灵鸡汤。
+
+${sampleMdx ? `【语气参考，只学口吻和节奏，禁止套它的段落结构】\n${sampleMdx.slice(0, 2200)}` : ''}
+
+只输出 JSON：
 {
   "slug": "kebab-case-slug",
   "title": "文章标题",
@@ -267,8 +281,17 @@ ${sampleMdx ? `【范文参考（称呼辨析类）】\n${sampleMdx.slice(0, 320
 }`;
 }
 
+const WRITING_STYLES = [
+	'本篇从具体场景写起（如年夜饭、回老家、家族微信群），不要表格，不要用「小结」作标题。',
+	'本篇当故事讲，口语化，2～3 个 ## 小标题即可，结尾自然收住。',
+	'本篇用短问答穿插叙述，不要「首先其次」，不要排比三点。',
+	'本篇若是辨析称呼才用一张小表格；否则纯叙述，别硬上表格。',
+	'本篇像跟朋友聊天，可有一句反问开头，别用「很多人从小听到大」式开场。',
+];
+
 function buildUserPrompt(prompt, slug) {
-	let text = `用户的写作需求：\n${prompt.trim()}`;
+	const styleHint = WRITING_STYLES[Math.floor(Math.random() * WRITING_STYLES.length)];
+	let text = `用户的写作需求：\n${prompt.trim()}\n\n【本篇写法】${styleHint}`;
 	if (slug) {
 		text += `\n\n请使用 URL slug：${slug}（title、description、tags、正文仍由你撰写）`;
 	}
