@@ -9,7 +9,9 @@
     "build": "astro build",
     "preview": "astro preview",
     "astro": "astro",
-    "article:ai": "node scripts/generate-article.mjs"
+    "article:ai": "node scripts/generate-article.mjs",
+    "logo:wxmp": "node scripts/export-logo-wxmp.mjs",
+    "article:batch": "node scripts/batch-articles.mjs"
   },
   "dependencies": {
     "@astrojs/starlight": "^0.39.2",
