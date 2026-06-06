@@ -73,13 +73,39 @@ npm run article:ai -- --prompt "女婿和姑爷有什么区别"
 
 ```bash
 npm run article:ai -- "举案齐眉的典故" --slug ju-an-qi-mei
-npm run article:batch
 ```
 
 ```bash
 npm run article:ai -- "..." --dry-run
 npm run article:ai -- "..." --publish
 ```
+
+## 批量生成（AI 选题 + 写稿）
+
+不再手写 10 条描述。给一个**主题方向**，AI 先生成 N 条互不重复的写作描述，再循环写稿：
+
+```bash
+npm run article:batch -- "姐妹之间的亲情"
+```
+
+```bash
+npm run article:batch -- --theme "过年走亲戚" --count 10 --publish
+```
+
+只生成选题、不写正文（可先审选题再写稿）：
+
+```bash
+npm run article:batch -- --topics-only "婆媳相处"
+```
+
+单独生成选题并保存 JSON：
+
+```bash
+npm run article:topics -- "兄弟之情" --out .cache/topics.json
+npm run article:batch -- --topics-file .cache/topics.json
+```
+
+选题会去重：会读取 `src/content/docs/articles/` 里已有文章的 `title`，避免与站内重复。
 
 **默认** `draft: true`，仅 `npm run dev` 可见。
 
