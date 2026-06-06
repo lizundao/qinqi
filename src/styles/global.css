@@ -91,6 +91,28 @@ html[data-has-sidebar] {
 		@apply mx-auto w-full max-w-[var(--qq-content-width)];
 	}
 
+	/* 首页小程序码：深色模式下白底扫码区做成「光岛」 */
+	.qq-hero-qr {
+		@apply relative;
+	}
+
+	.qq-hero-qr__scan {
+		box-shadow:
+			0 1px 2px rgba(15, 23, 42, 0.06),
+			inset 0 0 0 1px rgba(255, 255, 255, 0.9);
+	}
+
+	html[data-theme='dark'] .qq-hero-qr__scan {
+		box-shadow:
+			0 0 0 1px rgba(148, 163, 184, 0.2),
+			0 12px 40px -8px rgba(37, 99, 235, 0.35),
+			0 4px 16px -4px rgba(0, 0, 0, 0.4);
+	}
+
+	html[data-theme='dark'] .qq-hero-qr__card {
+		background: linear-gradient(165deg, rgb(30 41 59 / 0.95) 0%, rgb(15 23 42 / 0.92) 100%);
+	}
+
 	.home-hero {
 		@apply relative overflow-hidden;
 		background:
