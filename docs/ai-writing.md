@@ -3,6 +3,7 @@
 使用 **OpenAI 兼容 API** 生成亲戚常识文章，写入 `src/content/docs/articles/*.mdx`。  
 推荐 [硅基流动](https://cloud.siliconflow.cn/)，也可使用 DeepSeek 官方或其它中转。
 
+
 ## 配置
 
 1. 复制根目录 `.env.example` 为 `.env`
