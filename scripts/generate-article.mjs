@@ -29,6 +29,7 @@ function parseArgs(argv) {
 		if ((a === '--prompt' || a === '--topic' || a === '-p') && argv[i + 1]) {
 			args.prompt = argv[++i];
 		} else if (a === '--slug' && argv[i + 1]) args.slug = argv[++i];
+		else if (a === '--cover-url' && argv[i + 1]) args.coverUrl = argv[++i];
 		else if ((a === '--api-url' || a === '--base-url') && argv[i + 1]) args.apiUrl = argv[++i];
 		else if ((a === '--api-key' || a === '--key') && argv[i + 1]) args.apiKey = argv[++i];
 		else if (a === '--model' && argv[i + 1]) args.model = argv[++i];
@@ -55,6 +56,7 @@ function printHelp() {
 选项:
   "写作描述"           必填（也可 --prompt / --topic / -p）
   --slug <name>        可选，仅指定 URL 文件名；标题等仍由 AI 生成
+  --cover-url <url>    可选，封面图网络地址（写入 coverUrl，再用 npm run article:covers 下载）
   --api-url <url>      可选，API 根地址（覆盖 .env）
   --api-key <key>      可选，API Key（覆盖 .env，慎用于命令行历史）
   --model <id>         可选，模型 ID（覆盖 .env）
@@ -146,16 +148,17 @@ function todayISO() {
 	return new Date().toISOString().slice(0, 10);
 }
 
-function buildFrontmatter({ title, description, tags, draft }) {
+function buildFrontmatter({ title, description, tags, draft, coverUrl }) {
 	const tagLine = tags?.length
 		? `tags: [${tags.map((t) => JSON.stringify(String(t))).join(', ')}]`
 		: 'tags: ["亲戚常识"]';
+	const coverLine = coverUrl?.trim() ? `coverUrl: ${escapeYaml(coverUrl.trim())}` : '';
 	return `---
 title: ${escapeYaml(title)}
 description: ${escapeYaml(description)}
 date: ${todayISO()}
 ${tagLine}
-tableOfContents: false
+${coverLine ? `${coverLine}\n` : ''}tableOfContents: false
 prev: false
 next: false
 sidebar:
@@ -345,6 +348,7 @@ async function main() {
 		description: parsed.description,
 		tags: parsed.tags,
 		draft,
+		coverUrl: args.coverUrl,
 	});
 	const body = normalizeMarkdownTables(String(parsed.body || '').trim());
 	const fileContent = `${frontmatter}\n\n${body}\n`;

@@ -1,5 +1,6 @@
 ---
-import { getArticles, getArticleHref } from '../utils/articles';
+import { getArticles, getArticleHref, getArticleCover } from '../utils/articles';
+import ArticleCover from './ArticleCover.astro';
 
 const articles = await getArticles();
 
@@ -66,7 +67,9 @@ function searchText(title: string, description: string | undefined, tags: string
 					class="grid list-none gap-4 p-0 md:grid-cols-2 md:gap-5 xl:grid-cols-3"
 				>
 					{
-						articles.map((article) => (
+						articles.map((article) => {
+							const cover = getArticleCover(article);
+							return (
 							<li
 								data-article-item
 								data-search={searchText(
@@ -76,51 +79,57 @@ function searchText(title: string, description: string | undefined, tags: string
 								)}
 							>
 								<a
-									class="article-card group flex h-full flex-col rounded-2xl border border-slate-200/80 bg-white/90 p-5 text-inherit no-underline shadow-sm transition duration-300 hover:-translate-y-0.5 hover:border-blue-200/80 hover:shadow-md sm:p-6 dark:border-slate-700/80 dark:bg-slate-900/90 dark:hover:border-blue-800/80"
+									class="article-card group flex h-full flex-col overflow-hidden rounded-2xl border border-slate-200/80 bg-white/90 text-inherit no-underline shadow-sm transition duration-300 hover:-translate-y-0.5 hover:border-blue-200/80 hover:shadow-md dark:border-slate-700/80 dark:bg-slate-900/90 dark:hover:border-blue-800/80"
 									href={getArticleHref(article)}
 								>
-									<div class="flex flex-1 flex-col gap-2.5">
-										<h2 class="line-clamp-2 text-base font-semibold leading-snug text-slate-900 transition group-hover:text-brand dark:text-slate-100 dark:group-hover:text-blue-400">
-											{article.data.title}
-										</h2>
-										{
-											article.data.description && (
-												<p class="line-clamp-3 text-sm leading-[1.65] text-slate-600 dark:text-slate-400">
-													{article.data.description}
-												</p>
-											)
-										}
-									</div>
+									{cover && (
+										<ArticleCover src={cover} alt={article.data.title} variant="card" />
+									)}
+									<div class="flex flex-1 flex-col p-5 sm:p-6">
+										<div class="flex flex-1 flex-col gap-2.5">
+											<h2 class="line-clamp-2 text-base font-semibold leading-snug text-slate-900 transition group-hover:text-brand dark:text-slate-100 dark:group-hover:text-blue-400">
+												{article.data.title}
+											</h2>
+											{
+												article.data.description && (
+													<p class="line-clamp-3 text-sm leading-[1.65] text-slate-600 dark:text-slate-400">
+														{article.data.description}
+													</p>
+												)
+											}
+										</div>
 
-									<div class="mt-5 flex flex-wrap items-center gap-1.5 border-t border-slate-100 pt-4 dark:border-slate-800">
-										{
-											article.data.date && (
-												<time
-													class="text-xs text-slate-500 dark:text-slate-400"
-													datetime={article.data.date.toISOString()}
-												>
-													{formatDate(article.data.date)}
-												</time>
-											)
-										}
-										{
-											article.data.tags?.map((tag) => (
-												<span class="inline-flex items-center rounded-full bg-blue-50 px-2.5 py-0.5 text-xs text-brand-dark dark:bg-blue-950/50 dark:text-blue-300">
-													{tag}
-												</span>
-											))
-										}
-									</div>
+										<div class="mt-5 flex flex-wrap items-center gap-1.5 border-t border-slate-100 pt-4 dark:border-slate-800">
+											{
+												article.data.date && (
+													<time
+														class="text-xs text-slate-500 dark:text-slate-400"
+														datetime={article.data.date.toISOString()}
+													>
+														{formatDate(article.data.date)}
+													</time>
+												)
+											}
+											{
+												article.data.tags?.map((tag) => (
+													<span class="inline-flex items-center rounded-full bg-blue-50 px-2.5 py-0.5 text-xs text-brand-dark dark:bg-blue-950/50 dark:text-blue-300">
+														{tag}
+													</span>
+												))
+											}
+										</div>
 
-									<span class="mt-4 inline-flex items-center gap-1 text-sm font-medium text-brand opacity-80 transition group-hover:gap-1.5 group-hover:opacity-100 dark:text-blue-400">
-										阅读全文
-										<svg class="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true">
-											<path d="M5 12h14M13 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round" />
-										</svg>
-									</span>
+										<span class="mt-4 inline-flex items-center gap-1 text-sm font-medium text-brand opacity-80 transition group-hover:gap-1.5 group-hover:opacity-100 dark:text-blue-400">
+											阅读全文
+											<svg class="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true">
+												<path d="M5 12h14M13 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round" />
+											</svg>
+										</span>
+									</div>
 								</a>
 							</li>
-						))
+							);
+						})
 					}
 				</ul>
 

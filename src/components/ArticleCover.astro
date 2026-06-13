@@ -1,0 +1,37 @@
+---
+interface Props {
+	src: string;
+	alt: string;
+	variant?: 'card' | 'hero';
+}
+
+const { src, alt, variant = 'card' } = Astro.props;
+---
+
+{
+	variant === 'hero' ? (
+		<div class="article-cover article-cover--hero overflow-hidden rounded-2xl border border-slate-200/80 bg-slate-100 dark:border-slate-700/80 dark:bg-slate-800">
+			<img
+				src={src}
+				alt={alt}
+				width={1200}
+				height={675}
+				loading="eager"
+				decoding="async"
+				class="h-full max-h-72 w-full object-cover"
+			/>
+		</div>
+	) : (
+		<div class="article-cover article-cover--card overflow-hidden bg-slate-100 dark:bg-slate-800">
+			<img
+				src={src}
+				alt={alt}
+				width={600}
+				height={338}
+				loading="lazy"
+				decoding="async"
+				class="aspect-[16/9] w-full object-cover transition duration-300 group-hover:scale-[1.02]"
+			/>
+		</div>
+	)
+}

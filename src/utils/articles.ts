@@ -34,6 +34,12 @@ export function getArticleHref(entry: ArticleEntry) {
 	return `/articles/${getArticleSlug(entry)}/`;
 }
 
+/** 文章封面（public 路径），无则 undefined */
+export function getArticleCover(entry: ArticleEntry) {
+	const cover = entry.data.cover?.trim();
+	return cover || undefined;
+}
+
 export async function getArticles() {
 	return (await getCollection('docs')).filter(isArticleEntry).sort((a, b) => {
 		const dateA = a.data.date instanceof Date ? a.data.date.getTime() : 0;

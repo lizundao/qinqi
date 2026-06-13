@@ -1,9 +1,12 @@
 ---
+import ArticleCover from './ArticleCover.astro';
+
 interface Props {
 	title: string;
 	description?: string;
 	date?: Date;
 	tags?: string[];
+	cover?: string;
 	sectionLabel?: string;
 	backHref?: string;
 	backLabel?: string;
@@ -16,6 +19,7 @@ const {
 	description,
 	date,
 	tags,
+	cover,
 	sectionLabel = '知识库',
 	backHref = '/articles/',
 	backLabel = '返回亲戚常识',
@@ -45,6 +49,12 @@ const hasMeta = date || (tags && tags.length > 0);
 		</svg>
 		{backLabel}
 	</a>
+
+	{cover && (
+		<div class="article-detail__cover mb-8 md:mb-10">
+			<ArticleCover src={cover} alt={title} variant="hero" />
+		</div>
+	)}
 
 	<header class="article-detail__header mb-8 md:mb-10">
 		<p class="text-xs font-semibold tracking-wide text-brand dark:text-blue-400">{sectionLabel}</p>

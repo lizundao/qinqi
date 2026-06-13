@@ -1,7 +1,7 @@
 ---
 import ToolLayout from '../../layouts/ToolLayout.astro';
 import ArticleDetail from '../../components/ArticleDetail.astro';
-import { getArticleBySlug, getArticleSlug, getArticles } from '../../utils/articles';
+import { getArticleBySlug, getArticleSlug, getArticles, getArticleCover } from '../../utils/articles';
 import { renderArticleMarkdown } from '../../utils/renderArticleMarkdown';
 
 export async function getStaticPaths() {
@@ -28,6 +28,7 @@ const articleHtml = await renderArticleMarkdown(entry);
 		description={entry.data.description}
 		date={entry.data.date}
 		tags={entry.data.tags}
+		cover={getArticleCover(entry)}
 	>
 		<div set:html={articleHtml} />
 	</ArticleDetail>

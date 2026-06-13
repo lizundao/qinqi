@@ -108,6 +108,78 @@ npm run article:batch -- --topics-file .cache/topics.json
 
 选题会去重：会读取 `src/content/docs/articles/` 里已有文章的 `title`，避免与站内重复。
 
+## 文章封面图
+
+每篇文章可配封面，**从网络下载到本地**后使用（存 `public/images/articles/`，构建时随站点发布）。
+
+### frontmatter 字段
+
+```yaml
+coverUrl: "https://images.unsplash.com/photo-xxx"   # 待下载
+cover: /images/articles/my-slug.webp                 # 下载后自动写入
+```
+
+### 单篇下载
+
+```bash
+npm run article:cover -- --slug tang-vs-biao --url "https://example.com/photo.jpg"
+```
+
+### 批量下载
+
+在 MDX 里写好 `coverUrl`，然后：
+
+```bash
+npm run article:covers
+```
+
+脚本会裁剪为 1200×675 WebP，写入 `cover` 并删除 `coverUrl`。
+
+生成文章时也可直接带封面地址：
+
+```bash
+npm run article:ai -- "..." --cover-url "https://..." --publish
+npm run article:covers
+```
+
+无封面的文章列表仍正常显示，只是没有缩略图。
+
+### 批量自动配图（AI 生图）
+
+风格要求：**中国元素 + 真实人物摄影**，不要抽象/插画/卡通。脚本会自动追加写实后缀，并用 negative_prompt 排除抽象风。
+
+为全部尚无 `cover` 的文章自动生成封面（DeepSeek 写中文提示词 + 硅基流动 [Kwai-Kolors/Kolors](https://api-docs.siliconflow.cn/docs/userguide/capabilities/images) 生图）：
+
+```bash
+npm run article:covers:batch
+```
+
+覆盖已有 Openverse 封面，全部换成 AI 生图：
+
+```bash
+npm run article:covers:batch -- --force
+```
+
+测试前 3 篇：
+
+```bash
+npm run article:covers:batch -- --limit 3 --dry-run
+```
+
+`.env` 可选配置：
+
+```bash
+ARTICLE_IMAGE_MODEL=Kwai-Kolors/Kolors   # 默认已是此模型
+```
+
+429 限流时脚本会自动等待重试。Kolors 配额 **IPM=2、IPD=400**，默认篇间 **32 秒**（约 2 张/分钟）。81 篇约 41 分钟，单日可跑完。中断后续跑：
+
+```bash
+npm run article:covers:batch -- --resume
+```
+
+若今日 IPD 用尽，脚本会自动停止，次日再 `--resume` 即可。
+
 **默认** `draft: true`，仅 `npm run dev` 可见。
 
 ## 文风说明
