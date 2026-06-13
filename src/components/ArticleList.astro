@@ -32,8 +32,8 @@ const isHomeGrid = compact && grid;
 	{
 		showHeader && (
 			<header class="mb-7">
-				<h1 class="mb-2 text-xl font-bold tracking-tight text-slate-900 dark:text-slate-100">亲戚常识</h1>
-				<p class="text-sm leading-relaxed text-slate-500 dark:text-slate-400">
+				<h1 class="font-display mb-2 text-xl font-bold tracking-tight text-ink dark:text-stone-100">亲戚常识</h1>
+				<p class="text-sm leading-relaxed text-ink-muted dark:text-stone-400">
 					从习俗与历史入手，弄懂称呼背后的文化逻辑，走亲戚不再尴尬。
 				</p>
 			</header>
@@ -41,8 +41,8 @@ const isHomeGrid = compact && grid;
 	}
 	{
 		articles.length === 0 ? (
-			<p class="rounded-xl border border-dashed border-slate-300 px-4 py-8 text-center text-sm text-slate-500 dark:border-slate-700 dark:text-slate-400">
-				暂无文章，请在 <code class="rounded bg-slate-100 px-1 dark:bg-slate-800">src/content/docs/articles/</code>{' '}
+			<p class="rounded-lg border border-dashed border-stone-300 px-4 py-8 text-center text-sm text-ink-muted dark:border-stone-700 dark:text-stone-400">
+				暂无文章，请在 <code class="rounded bg-stone-100 px-1 dark:bg-stone-800">src/content/docs/articles/</code>{' '}
 				添加内容。
 			</p>
 		) : (
@@ -60,7 +60,7 @@ const isHomeGrid = compact && grid;
 						<li>
 							<a
 								class:list={[
-									'article-card group flex h-full w-full flex-col overflow-hidden rounded-2xl border border-slate-200/80 bg-white/90 text-inherit no-underline shadow-sm transition hover:-translate-y-0.5 hover:border-blue-200/80 hover:shadow-md dark:border-slate-700/80 dark:bg-slate-900/90 dark:hover:border-blue-800/80',
+									'article-card qq-card group flex h-full w-full flex-col text-inherit no-underline',
 									!cover && (isHomeGrid ? 'px-4 py-4 sm:px-5 sm:py-5' : compact ? 'px-5 py-5' : 'px-6 py-6'),
 								]}
 								href={getArticleHref(article)}
@@ -89,7 +89,7 @@ const isHomeGrid = compact && grid;
 									>
 									<p
 										class:list={[
-											'font-semibold text-slate-900 transition group-hover:text-brand dark:text-slate-100 dark:group-hover:text-blue-400',
+											'font-semibold text-ink transition group-hover:text-brand dark:text-stone-100 dark:group-hover:text-red-400',
 											isHomeGrid
 												? 'line-clamp-2 text-[0.9375rem] leading-snug'
 												: compact
@@ -102,7 +102,7 @@ const isHomeGrid = compact && grid;
 									{article.data.description && (
 										<p
 											class:list={[
-												'm-0 text-slate-600 dark:text-slate-400',
+												'm-0 text-ink-muted dark:text-stone-400',
 												isHomeGrid
 													? 'line-clamp-2 text-[0.8125rem] leading-[1.65]'
 													: 'text-sm leading-relaxed',
@@ -114,13 +114,13 @@ const isHomeGrid = compact && grid;
 									</div>
 									<div
 										class:list={[
-											'flex flex-wrap items-center gap-1.5 border-t border-slate-100 dark:border-slate-800',
+											'flex flex-wrap items-center gap-1.5 border-t border-stone-100 dark:border-stone-800',
 											isHomeGrid ? 'mt-4 pt-3' : 'mt-6 pt-3.5',
 										]}
 									>
 									{article.data.date && (
 										<time
-											class="inline-flex shrink-0 items-center text-xs text-slate-500 dark:text-slate-400"
+											class="inline-flex shrink-0 items-center text-xs text-ink-muted dark:text-stone-400"
 											datetime={article.data.date.toISOString()}
 										>
 											{formatDate(article.data.date)}
@@ -137,7 +137,7 @@ const isHomeGrid = compact && grid;
 										article.data.tags?.map((tag) => (
 											<span
 												class:list={[
-													'inline-flex items-center rounded-full bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-400',
+													'qq-tag',
 													isHomeGrid ? 'px-2 py-0.5 text-[0.6875rem]' : 'px-2.5 py-0.5 text-xs',
 												]}
 											>

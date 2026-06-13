@@ -36,7 +36,7 @@ function initArticlesPage() {
 		prevBtn.textContent = '上一页';
 		prevBtn.disabled = currentPage <= 1;
 		prevBtn.className =
-			'rounded-xl border border-slate-200/90 bg-white px-4 py-2 text-sm font-medium text-slate-700 shadow-sm transition hover:border-slate-300 hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-40 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200 dark:hover:border-slate-600 dark:hover:bg-slate-800';
+			'rounded-md border border-stone-200/90 bg-white px-4 py-2 text-sm font-medium text-ink transition hover:border-stone-300 hover:bg-paper-deep disabled:cursor-not-allowed disabled:opacity-40 dark:border-stone-700 dark:bg-night-card dark:text-stone-200 dark:hover:border-stone-600 dark:hover:bg-stone-800';
 
 		const nextBtn = document.createElement('button');
 		nextBtn.type = 'button';
@@ -45,7 +45,7 @@ function initArticlesPage() {
 		nextBtn.className = prevBtn.className;
 
 		const info = document.createElement('span');
-		info.className = 'inline-flex min-w-[5rem] items-center justify-center text-sm text-slate-500 dark:text-slate-400';
+		info.className = 'inline-flex min-w-[5rem] items-center justify-center text-sm text-ink-muted dark:text-stone-400';
 		info.textContent = `${currentPage} / ${totalPages}`;
 
 		prevBtn.addEventListener('click', () => {

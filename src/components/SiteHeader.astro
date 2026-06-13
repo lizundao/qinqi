@@ -18,9 +18,9 @@ function isActive(href: string) {
 }
 
 const linkBase =
-	'rounded-full px-3 py-1.5 text-sm font-medium text-slate-500 no-underline whitespace-nowrap transition hover:bg-slate-100 hover:text-slate-900 dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-slate-100 max-[49.9rem]:px-2 max-[49.9rem]:py-1 max-[49.9rem]:text-[0.82rem]';
+	'relative border-b-2 border-transparent px-3 py-2 text-sm font-medium text-ink-muted no-underline whitespace-nowrap transition hover:text-ink dark:text-stone-400 dark:hover:text-stone-200 max-[49.9rem]:px-2 max-[49.9rem]:py-1.5 max-[49.9rem]:text-[0.82rem]';
 const linkActive =
-	'bg-blue-50 font-semibold text-brand-dark dark:bg-blue-950/50 dark:text-blue-300';
+	'border-brand font-semibold text-brand dark:border-red-500 dark:text-red-400';
 ---
 
 <div class="site-container">
@@ -28,7 +28,7 @@ const linkActive =
 	<div class="title-wrapper flex min-w-0 flex-none overflow-clip p-1 -m-1 max-[49.9rem]:flex-1">
 		<a
 			href="/"
-			class="site-title inline-flex items-center gap-2 text-[0.95rem] font-bold tracking-wide text-slate-800 no-underline dark:text-slate-100"
+			class="site-title inline-flex items-center gap-2 text-ink no-underline dark:text-stone-100"
 		>
 			<img class="h-7 w-7 dark:hidden" src={logo.src} width="28" height="28" alt="" />
 			<img class="hidden h-7 w-7 dark:block" src={logoDark.src} width="28" height="28" alt="" />
@@ -42,7 +42,7 @@ const linkActive =
 		class="header-end flex min-w-0 flex-none flex-row flex-nowrap items-center gap-2.5 print:hidden max-[49.9rem]:w-full max-[49.9rem]:flex-wrap max-[49.9rem]:justify-end"
 	>
 		<slot name="search" />
-		<nav class="top-nav flex shrink-0 items-center gap-0.5" aria-label="主导航">
+		<nav class="top-nav flex shrink-0 items-center gap-1" aria-label="主导航">
 			{
 				navItems.map((item) => (
 					<a href={item.href} class:list={[linkBase, isActive(item.href) && linkActive]}>
@@ -53,11 +53,11 @@ const linkActive =
 		</nav>
 		<div class="header-tools flex shrink-0 items-center gap-3.5">
 			<div
-				class="social-icons flex items-center gap-4 after:h-8 after:border-e after:border-slate-300 dark:after:border-slate-600"
+				class="social-icons flex items-center gap-4 after:h-8 after:border-e after:border-stone-300 dark:after:border-stone-600"
 			>
 				<a
 					href="https://github.com/lizundao/qinqi"
-					class="flex text-slate-500 no-underline transition hover:text-slate-800 dark:text-slate-400 dark:hover:text-slate-200"
+					class="flex text-ink-muted no-underline transition hover:text-ink dark:text-stone-400 dark:hover:text-stone-200"
 					target="_blank"
 					rel="noopener"
 					aria-label="GitHub"

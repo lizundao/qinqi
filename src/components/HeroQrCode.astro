@@ -5,19 +5,13 @@ import qrcodeImg from '../assets/qrcode.jpg';
 
 <div class="qq-hero-qr mx-auto w-full max-w-[16.5rem] sm:max-w-[18rem]">
 	<div
-		class="pointer-events-none absolute -inset-6 rounded-[2.5rem] bg-[radial-gradient(circle_at_50%_45%,rgba(37,99,235,0.18),transparent_68%)] blur-xl dark:bg-[radial-gradient(circle_at_50%_45%,rgba(37,99,235,0.28),transparent_70%)]"
-		aria-hidden="true"
-	>
-	</div>
-
-	<div
-		class="qq-hero-qr__card relative overflow-hidden rounded-2xl border border-slate-200/90 bg-white/95 shadow-[0_20px_50px_-12px_rgba(37,99,235,0.18)] backdrop-blur-sm dark:border-slate-600/50 dark:bg-slate-800/90 dark:shadow-[0_24px_60px_-12px_rgba(0,0,0,0.55),0_0_0_1px_rgba(148,163,184,0.08)]"
+		class="qq-hero-qr__card relative overflow-hidden rounded-lg border border-stone-300/90 bg-white/95 dark:border-stone-600/60 dark:bg-night-card/95"
 	>
 		<div
-			class="flex items-center gap-2.5 border-b border-slate-100 px-4 py-3 dark:border-slate-700/70 dark:bg-slate-800/95"
+			class="flex items-center gap-2.5 border-b border-stone-200/90 px-4 py-3 dark:border-stone-700/70"
 		>
 			<span
-				class="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-[#07C160] shadow-sm"
+				class="flex h-7 w-7 shrink-0 items-center justify-center rounded-md bg-[#07C160]"
 				aria-hidden="true"
 			>
 				<svg class="h-4 w-4 text-white" viewBox="0 0 24 24" fill="currentColor">
@@ -27,19 +21,19 @@ import qrcodeImg from '../assets/qrcode.jpg';
 				</svg>
 			</span>
 			<div class="min-w-0">
-				<p class="text-sm font-semibold leading-tight text-slate-800 dark:text-slate-100">
+				<p class="font-display text-sm font-semibold leading-tight text-ink dark:text-stone-100">
 					微信小程序
 				</p>
-				<p class="truncate text-[11px] leading-tight text-slate-500 dark:text-slate-400">
+				<p class="truncate text-[11px] leading-tight text-ink-muted dark:text-stone-400">
 					亲戚百科 · 随身查称呼
 				</p>
 			</div>
 		</div>
 
-		<div class="px-4 pb-3 pt-4 dark:bg-slate-800/60">
-			<div class="qq-hero-qr__scan relative rounded-xl bg-white p-3 dark:bg-white">
+		<div class="px-4 pb-3 pt-4">
+			<div class="qq-hero-qr__scan relative rounded-md bg-white p-3">
 				<div
-					class="pointer-events-none absolute inset-3 rounded-lg border border-dashed border-slate-200/90 dark:border-slate-300/50"
+					class="pointer-events-none absolute inset-3 rounded border border-dashed border-stone-200/90"
 					aria-hidden="true"
 				>
 				</div>
@@ -50,14 +44,14 @@ import qrcodeImg from '../assets/qrcode.jpg';
 					height={430}
 					loading="eager"
 					decoding="async"
-					class="relative z-10 w-full rounded-lg"
+					class="relative z-10 w-full rounded"
 				/>
 			</div>
 		</div>
 
 		<div class="px-4 pb-4 text-center">
-			<p class="text-xs font-medium text-slate-600 dark:text-slate-300">微信扫一扫</p>
-			<p class="mt-0.5 text-[11px] text-slate-400 dark:text-slate-500">
+			<p class="text-xs font-medium text-ink-muted dark:text-stone-300">微信扫一扫</p>
+			<p class="mt-0.5 text-[11px] text-stone-400 dark:text-stone-500">
 				过年走亲戚，称呼不求人
 			</p>
 		</div>

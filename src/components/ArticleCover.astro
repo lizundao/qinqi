@@ -10,7 +10,7 @@ const { src, alt, variant = 'card' } = Astro.props;
 
 {
 	variant === 'hero' ? (
-		<div class="article-cover article-cover--hero overflow-hidden rounded-2xl border border-slate-200/80 bg-slate-100 dark:border-slate-700/80 dark:bg-slate-800">
+		<div class="article-cover article-cover--hero overflow-hidden rounded-lg border border-stone-200/80 bg-stone-100 dark:border-stone-700/80 dark:bg-stone-800">
 			<img
 				src={src}
 				alt={alt}
@@ -22,7 +22,7 @@ const { src, alt, variant = 'card' } = Astro.props;
 			/>
 		</div>
 	) : (
-		<div class="article-cover article-cover--card overflow-hidden bg-slate-100 dark:bg-slate-800">
+		<div class="article-cover article-cover--card overflow-hidden bg-stone-100 dark:bg-stone-800">
 			<img
 				src={src}
 				alt={alt}
@@ -30,7 +30,7 @@ const { src, alt, variant = 'card' } = Astro.props;
 				height={338}
 				loading="lazy"
 				decoding="async"
-				class="aspect-[16/9] w-full object-cover transition duration-300 group-hover:scale-[1.02]"
+				class="aspect-[16/9] w-full object-cover"
 			/>
 		</div>
 	)

@@ -8,104 +8,46 @@ interface Props {
 
 const {
 	title = '亲戚百科',
-	tagline = '家族圈子越来越小，有的孩子连表亲都认不全，逢年过节的称呼也张口结舌。<br/>亲戚百科帮你搞清叫法、读懂亲缘——辨别亲疏、理智看待血缘、珍重亲情、注重日常相处。',
+	tagline = '搞清楚舅妈、舅公怎么叫——本地查称呼，不上传隐私。',
 } = Astro.props;
-
-const actions = [
-	{ text: '打开计算器', link: '/calc/', primary: true },
-	{ text: '阅读亲戚常识', link: '/articles/', primary: false },
-];
 ---
 
-<div class="hero relative grid grid-cols-1 items-center gap-10 pb-6 lg:grid-cols-2 lg:gap-16 lg:pb-10 lg:pt-4">
-	<div
-		class="pointer-events-none absolute -top-20 left-1/2 -z-10 h-72 w-[120%] -translate-x-1/2 bg-[radial-gradient(ellipse_at_center,rgba(37,99,235,0.12),transparent_70%)] dark:bg-[radial-gradient(ellipse_at_center,rgba(37,99,235,0.2),transparent_70%)]"
-		aria-hidden="true"
-	>
-	</div>
-
-	<div class="flex flex-col gap-8 text-center lg:text-left">
-		<div class="flex flex-col items-center gap-5 lg:items-start">
-			<span
-				class="inline-flex items-center gap-2 rounded-full border border-blue-200/80 bg-blue-50/80 px-3.5 py-1 text-xs font-semibold tracking-wide text-brand-dark dark:border-blue-800/60 dark:bg-blue-950/50 dark:text-blue-300"
-			>
-				<span class="h-1.5 w-1.5 rounded-full bg-brand dark:bg-blue-400"></span>
-				称呼不求人 · 浏览器本地计算
-			</span>
+<div class="hero grid grid-cols-1 items-center gap-10 pb-6 lg:grid-cols-2 lg:gap-14 lg:pb-10 lg:pt-4">
+	<div class="flex flex-col gap-7 text-center lg:text-left">
+		<div class="flex flex-col items-center gap-4 lg:items-start">
 			<h1
-				class="max-w-[14ch] text-[clamp(2rem,calc(0.5rem+5vw),3.75rem)] font-bold leading-[1.12] tracking-tight text-slate-900 dark:text-white"
+				class="font-brand max-w-[14ch] text-[clamp(2.125rem,calc(0.5rem+5vw),3.75rem)] font-normal leading-[1.15] tracking-[0.04em] text-ink dark:text-stone-100"
 			>
 				{title}
 			</h1>
-			<div
-				class="max-w-xl text-[clamp(1rem,0.5vw+0.95rem,1.2rem)] leading-[1.75] text-slate-600 dark:text-slate-300"
-				set:html={tagline}
-			/>
-			<ul class="flex flex-wrap justify-center gap-2 lg:justify-start">
-				{
-					['搞清称呼', '读懂亲疏', '体面走亲戚'].map((item) => (
-						<li class="rounded-full bg-slate-100/90 px-3 py-1 text-xs font-medium text-slate-600 dark:bg-slate-800/80 dark:text-slate-300">
-							{item}
-						</li>
-					))
-				}
-			</ul>
+			<p
+				class="max-w-md text-[clamp(1rem,0.5vw+0.95rem,1.125rem)] leading-[1.75] text-ink-muted dark:text-stone-400"
+			>
+				{tagline}
+			</p>
 		</div>
 
-		<div class="flex flex-wrap items-center justify-center gap-3 lg:justify-start">
-			{
-				actions.map((action) =>
-					action.primary ? (
-						<a
-							href={action.link}
-							class="inline-flex items-center gap-2 rounded-xl bg-brand px-6 py-3.5 text-base font-semibold text-white no-underline shadow-lg shadow-blue-500/25 transition hover:bg-brand-dark hover:shadow-xl hover:shadow-blue-500/30"
-						>
-							{action.text}
-							<svg
-								class="h-4 w-4"
-								viewBox="0 0 24 24"
-								fill="none"
-								stroke="currentColor"
-								stroke-width="2.5"
-								aria-hidden="true"
-							>
-								<path d="M5 12h14M13 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round" />
-							</svg>
-						</a>
-					) : (
-						<a
-							href={action.link}
-							class="inline-flex items-center gap-2 rounded-xl border border-slate-200/90 bg-white/90 px-6 py-3.5 text-base font-semibold text-slate-700 no-underline shadow-sm transition hover:border-slate-300 hover:bg-white dark:border-slate-600 dark:bg-slate-900/90 dark:text-slate-200 dark:hover:border-slate-500 dark:hover:bg-slate-800"
-						>
-							<svg
-								class="h-4 w-4 text-slate-400"
-								viewBox="0 0 24 24"
-								fill="none"
-								stroke="currentColor"
-								stroke-width="2"
-								aria-hidden="true"
-							>
-								<path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H18v18H6.5A2.5 2.5 0 0 1 4 18.5v-13Z" />
-								<path d="M8 7h8M8 11h6M8 15h4" />
-							</svg>
-							{action.text}
-						</a>
-					),
-				)
-			}
+		<div class="flex flex-wrap items-center justify-center gap-4 lg:justify-start">
+			<a href="/calc/" class="qq-btn-primary">
+				查称呼
+				<svg
+					class="h-4 w-4"
+					viewBox="0 0 24 24"
+					fill="none"
+					stroke="currentColor"
+					stroke-width="2.5"
+					aria-hidden="true"
+				>
+					<path d="M5 12h14M13 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round" />
+				</svg>
+			</a>
+			<a href="/articles/" class="qq-link text-sm">
+				读亲戚常识 →
+			</a>
 		</div>
 	</div>
 
 	<div class="flex w-full items-center justify-center lg:justify-end">
-		<div class="relative w-full max-w-md lg:max-w-lg">
-			<div
-				class="pointer-events-none absolute -inset-4 rounded-[2rem] bg-gradient-to-br from-blue-200/40 via-transparent to-orange-100/30 blur-2xl dark:from-blue-900/30 dark:to-orange-900/10"
-				aria-hidden="true"
-			>
-			</div>
-			<div class="relative">
-				<HeroQrCode />
-			</div>
-		</div>
+		<HeroQrCode />
 	</div>
 </div>

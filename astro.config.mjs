@@ -65,21 +65,6 @@ export default defineConfig({
                         content: '亲戚称呼,亲戚关系,中国亲戚,称谓计算器,娘亲舅大',
                     },
                 },
-                {
-                    tag: 'link',
-                    attrs: {
-                        rel: 'preconnect',
-                        href: 'https://fonts.googleapis.com',
-                    },
-                },
-                {
-                    tag: 'link',
-                    attrs: {
-                        rel: 'preconnect',
-                        href: 'https://fonts.gstatic.com',
-                        crossorigin: true,
-                    },
-                },
             ],
         }),
         // 放在 Starlight 之后，且 optimize: false，否则 MDX 表格会变成纯文本

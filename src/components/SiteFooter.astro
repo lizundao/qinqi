@@ -9,17 +9,17 @@ const navItems = [
 ];
 ---
 
-<footer class="site-footer mt-auto border-t border-slate-200/80 bg-slate-50/90 dark:border-slate-800 dark:bg-slate-950/90">
+<footer class="site-footer mt-auto border-t border-stone-200/80 bg-paper dark:border-stone-800 dark:bg-night">
 	<div class="site-container py-8 lg:py-10">
 		<div class="flex flex-col gap-6 sm:flex-row sm:items-start sm:justify-between">
 			<div class="space-y-2">
 				<a
 					href="/"
-					class="inline-block text-[0.95rem] font-bold tracking-wide text-slate-800 no-underline dark:text-slate-100"
+					class="font-brand inline-block text-[1.05rem] font-normal tracking-[0.06em] text-ink no-underline dark:text-stone-100"
 				>
 					亲戚百科
 				</a>
-				<p class="max-w-sm text-sm leading-relaxed text-slate-500 dark:text-slate-400">
+				<p class="max-w-sm text-sm leading-relaxed text-ink-muted dark:text-stone-400">
 					搞清称呼，读懂亲缘。辨别亲疏、理智看待血缘、珍重亲情、注重日常相处。
 				</p>
 			</div>
@@ -29,7 +29,7 @@ const navItems = [
 					navItems.map((item) => (
 						<a
 							href={item.href}
-							class="text-sm text-slate-500 no-underline transition hover:text-brand dark:text-slate-400 dark:hover:text-blue-400"
+							class="text-sm text-ink-muted no-underline transition hover:text-indigo dark:text-stone-400 dark:hover:text-stone-200"
 						>
 							{item.label}
 						</a>
@@ -39,12 +39,12 @@ const navItems = [
 		</div>
 
 		<div
-			class="mt-6 flex flex-col gap-3 border-t border-slate-200/70 pt-6 text-xs text-slate-400 sm:flex-row sm:items-center sm:justify-between dark:border-slate-800 dark:text-slate-500"
+			class="mt-6 flex flex-col gap-3 border-t border-stone-200/70 pt-6 text-xs text-stone-400 sm:flex-row sm:items-center sm:justify-between dark:border-stone-800 dark:text-stone-500"
 		>
 			<p>© {year} 亲戚百科 · qinqi.wiki</p>
 			<a
 				href="https://github.com/lizundao/qinqi"
-				class="inline-flex items-center gap-1.5 text-slate-400 no-underline transition hover:text-slate-600 dark:hover:text-slate-300"
+				class="inline-flex items-center gap-1.5 text-stone-400 no-underline transition hover:text-ink-muted dark:hover:text-stone-300"
 				target="_blank"
 				rel="noopener"
 			>

@@ -1,4 +1,10 @@
-@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;600;700&display=swap');
+@import '@fontsource/noto-sans-sc/chinese-simplified-400.css';
+@import '@fontsource/noto-sans-sc/chinese-simplified-500.css';
+@import '@fontsource/noto-sans-sc/chinese-simplified-600.css';
+@import '@fontsource/noto-sans-sc/chinese-simplified-700.css';
+@import '@fontsource/noto-serif-sc/chinese-simplified-400.css';
+@import '@fontsource/noto-serif-sc/chinese-simplified-600.css';
+@import '@fontsource/lxgw-wenkai-tc/chinese-traditional-400.css';
 @import 'tailwindcss';
 
 /* 与 Starlight 主题切换一致：data-theme="dark" */
@@ -8,10 +14,19 @@
 	--font-sans:
 		'Noto Sans SC', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI',
 		sans-serif;
-	--color-brand: #2563eb;
-	--color-brand-dark: #1d4ed8;
-	--color-warm: #c2410c;
-	--radius-card: 1rem;
+	--font-display: 'Noto Serif SC', 'Songti SC', Georgia, serif;
+	--font-brand: 'LXGW WenKai TC', 'LXGW WenKai', 'KaiTi', 'STKaiti', serif;
+	--color-brand: #b91c1c;
+	--color-brand-dark: #991b1b;
+	--color-warm: #b45309;
+	--color-indigo: #1e4d6b;
+	--color-paper: #f7f3eb;
+	--color-paper-deep: #efe9dc;
+	--color-ink: #3d3d3d;
+	--color-ink-muted: #6b6560;
+	--color-night: #1a1814;
+	--color-night-card: #242018;
+	--radius-card: 0.5rem;
 }
 
 @layer base {
@@ -20,19 +35,25 @@
 	}
 
 	body {
-		@apply bg-slate-50 font-sans text-slate-800 dark:bg-slate-950 dark:text-slate-200;
+		@apply bg-paper font-sans text-ink dark:bg-night dark:text-stone-300;
 	}
 }
 
 /* Starlight 品牌色与布局变量 */
 :root {
-	--sl-color-accent-low: #eff6ff;
-	--sl-color-accent: #2563eb;
-	--sl-color-accent-high: #1d4ed8;
+	--sl-color-accent-low: #fef2f2;
+	--sl-color-accent: #b91c1c;
+	--sl-color-accent-high: #991b1b;
 	--qq-content-width: 52rem;
 	--qq-home-width: 68rem;
 	--qq-search-width: 15rem;
 	--sl-content-width: var(--qq-content-width);
+}
+
+html[data-theme='dark'] {
+	--sl-color-accent-low: #3d2020;
+	--sl-color-accent: #dc2626;
+	--sl-color-accent-high: #ef4444;
 }
 
 html[data-has-sidebar] {
@@ -40,21 +61,53 @@ html[data-has-sidebar] {
 }
 
 @layer components {
+	.font-display {
+		font-family: var(--font-display);
+	}
+
+	.font-brand {
+		font-family: var(--font-brand);
+	}
+
+	.qq-btn-primary {
+		@apply inline-flex items-center gap-2 rounded-md bg-brand px-6 py-3 text-base font-semibold text-white no-underline transition hover:bg-brand-dark;
+	}
+
+	.qq-btn-outline {
+		@apply inline-flex items-center gap-2 rounded-md border border-stone-300/90 bg-white/80 px-5 py-2.5 text-sm font-medium text-ink no-underline transition hover:border-stone-400 hover:bg-white dark:border-stone-600 dark:bg-night-card dark:text-stone-200 dark:hover:border-stone-500;
+	}
+
+	.qq-link {
+		@apply font-medium text-indigo no-underline transition hover:text-brand dark:text-stone-400 dark:hover:text-red-400;
+	}
+
+	.qq-tag {
+		@apply inline-flex items-center rounded-md bg-stone-100 px-2 py-0.5 text-xs text-ink-muted dark:bg-stone-800 dark:text-stone-400;
+	}
+
+	.qq-card {
+		@apply overflow-hidden rounded-lg border border-stone-200/90 bg-white/95 transition dark:border-stone-700/80 dark:bg-night-card/95;
+	}
+
+	.qq-card:hover {
+		@apply border-stone-300 dark:border-stone-600;
+	}
+
 	/* ── 计算器动态状态（由 calc.ts 切换 class） ── */
 	.calc-seg-btn {
-		@apply rounded-lg px-2.5 py-2 text-xs leading-snug text-slate-500 transition sm:text-sm dark:text-slate-400;
+		@apply rounded-md px-2.5 py-2 text-xs leading-snug text-ink-muted transition sm:text-sm dark:text-stone-400;
 	}
 
 	.calc-seg-btn.is-on {
-		@apply bg-white font-semibold text-brand-dark shadow-sm dark:bg-slate-700 dark:text-blue-200;
+		@apply bg-white font-semibold text-brand-dark shadow-sm dark:bg-stone-700 dark:text-red-300;
 	}
 
 	#calc-result.empty {
-		@apply text-slate-400 dark:text-slate-500;
+		@apply text-stone-400 dark:text-stone-500;
 	}
 
 	#calc-result.success {
-		@apply border-solid border-blue-200/90 bg-blue-50/60 dark:border-blue-800/80 dark:bg-blue-950/30;
+		@apply border-solid border-stone-200 bg-paper-deep/60 dark:border-stone-700 dark:bg-stone-900/40;
 	}
 
 	#calc-result.error {
@@ -62,21 +115,20 @@ html[data-has-sidebar] {
 	}
 
 	.calc-result-tag {
-		@apply inline-flex rounded-full border border-blue-200/80 bg-white px-4 py-1.5 text-xl font-bold tracking-wide text-brand-dark shadow-sm dark:border-blue-700 dark:bg-slate-800 dark:text-blue-200;
+		@apply inline-flex rounded-md border border-stone-200/90 bg-white px-4 py-1.5 text-xl font-bold tracking-wide text-brand-dark dark:border-stone-600 dark:bg-stone-800 dark:text-red-300;
 	}
 
 	.calc-result-placeholder {
 		@apply w-full text-base;
 	}
 
-	/* 与页脚一致的内容区宽度 */
 	.site-container {
 		@apply mx-auto w-full max-w-[90rem] px-4 sm:px-6 lg:px-8;
 	}
 
 	/* ── Starlight 壳层微调 ── */
 	header.header {
-		@apply sticky top-0 z-50 flex min-h-14 items-center border-b border-slate-200/80 bg-slate-50/90 backdrop-blur-md dark:border-slate-800 dark:bg-slate-950/90;
+		@apply sticky top-0 z-50 flex min-h-14 items-center border-b border-stone-200/80 bg-paper/95 dark:border-stone-800 dark:bg-night/95;
 	}
 
 	header.header > .site-container {
@@ -84,48 +136,36 @@ html[data-has-sidebar] {
 	}
 
 	.site-title {
-		@apply font-bold tracking-wide;
+		@apply font-brand text-[1.05rem] font-normal tracking-[0.06em];
 	}
 
 	.main-pane .content-panel .sl-container {
 		@apply mx-auto w-full max-w-[var(--qq-content-width)];
 	}
 
-	/* 首页小程序码：深色模式下白底扫码区做成「光岛」 */
 	.qq-hero-qr {
 		@apply relative;
 	}
 
 	.qq-hero-qr__scan {
-		box-shadow:
-			0 1px 2px rgba(15, 23, 42, 0.06),
-			inset 0 0 0 1px rgba(255, 255, 255, 0.9);
+		box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.06);
 	}
 
 	html[data-theme='dark'] .qq-hero-qr__scan {
-		box-shadow:
-			0 0 0 1px rgba(148, 163, 184, 0.2),
-			0 12px 40px -8px rgba(37, 99, 235, 0.35),
-			0 4px 16px -4px rgba(0, 0, 0, 0.4);
+		box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.08);
 	}
 
 	html[data-theme='dark'] .qq-hero-qr__card {
-		background: linear-gradient(165deg, rgb(30 41 59 / 0.95) 0%, rgb(15 23 42 / 0.92) 100%);
+		@apply bg-night-card;
 	}
 
 	.home-hero {
-		@apply relative overflow-hidden;
-		background:
-			radial-gradient(ellipse 75% 55% at 15% -5%, rgba(37, 99, 235, 0.14), transparent 65%),
-			radial-gradient(ellipse 55% 45% at 95% 15%, rgba(194, 65, 12, 0.07), transparent 60%),
-			linear-gradient(180deg, rgb(248 250 252) 0%, rgb(239 246 255 / 0.55) 100%);
+		@apply relative border-b border-stone-200/70 bg-paper dark:border-stone-800/80 dark:bg-night;
+		background-image: radial-gradient(ellipse 80% 50% at 50% 0%, rgba(61, 61, 61, 0.04), transparent 70%);
 	}
 
 	html[data-theme='dark'] .home-hero {
-		background:
-			radial-gradient(ellipse 75% 55% at 15% -5%, rgba(37, 99, 235, 0.22), transparent 65%),
-			radial-gradient(ellipse 55% 45% at 95% 15%, rgba(194, 65, 12, 0.1), transparent 60%),
-			linear-gradient(180deg, rgb(2 6 23) 0%, rgb(15 23 42) 100%);
+		background-image: radial-gradient(ellipse 80% 50% at 50% 0%, rgba(255, 255, 255, 0.03), transparent 70%);
 	}
 
 	.home-body h2,
@@ -140,19 +180,17 @@ html[data-has-sidebar] {
 	}
 
 	.sidebar-content a[aria-current='page'] {
-		@apply bg-blue-50 font-semibold text-brand-dark dark:bg-blue-950/50 dark:text-blue-300;
+		@apply border-b-2 border-brand font-semibold text-brand-dark dark:text-red-300;
 	}
 
 	.site-footer {
 		@apply w-full;
 	}
 
-
 	.header-end {
 		@apply flex-row items-center;
 	}
 
-	/* 搜索框 */
 	.header-search {
 		flex: 0 0 var(--qq-search-width);
 		width: var(--qq-search-width);
@@ -168,25 +206,23 @@ html[data-has-sidebar] {
 	}
 
 	.header-search button[data-open-modal] {
-		@apply flex h-9 w-full min-w-full max-w-none cursor-pointer items-center justify-start gap-2 rounded-lg border border-slate-300 bg-white px-3 text-sm text-slate-500 dark:border-slate-600 dark:bg-slate-900 dark:text-slate-400;
+		@apply flex h-9 w-full min-w-full max-w-none cursor-pointer items-center justify-start gap-2 rounded-md border border-stone-300 bg-white px-3 text-sm text-ink-muted dark:border-stone-600 dark:bg-night-card dark:text-stone-400;
 	}
 
 	.header-search button[data-open-modal]:hover {
-		@apply border-slate-400 text-slate-800 dark:border-slate-500 dark:text-slate-200;
+		@apply border-stone-400 text-ink dark:border-stone-500 dark:text-stone-200;
 	}
 
 	.header-search button[data-open-modal] > :last-child {
 		margin-inline-start: auto !important;
 	}
 
-	/* 隐藏 Starlight 默认标题（自定义文章列表） */
 	.content-panel:has(.article-list-page) > h1#_top {
 		@apply hidden;
 	}
 
-	/* 文章详情页正文排版（独立页，非 Starlight 文档壳） */
 	.article-prose {
-		@apply text-[1.02rem] leading-[1.85] text-slate-700 dark:text-slate-300;
+		@apply text-[1.02rem] leading-[1.85] text-ink dark:text-stone-300;
 	}
 
 	.article-prose > :first-child {
@@ -198,11 +234,11 @@ html[data-has-sidebar] {
 	}
 
 	.article-prose h2 {
-		@apply mt-10 mb-4 border-b border-slate-200/80 pb-2 text-xl font-bold tracking-tight text-slate-900 dark:border-slate-800 dark:text-slate-100;
+		@apply mt-10 mb-4 border-b border-stone-200/80 pb-2 font-display text-xl font-bold tracking-tight text-ink dark:border-stone-700 dark:text-stone-100;
 	}
 
 	.article-prose h3 {
-		@apply mt-8 mb-3 text-lg font-semibold text-slate-900 dark:text-slate-100;
+		@apply mt-8 mb-3 text-lg font-semibold text-ink dark:text-stone-100;
 	}
 
 	.article-prose ul,
@@ -223,23 +259,23 @@ html[data-has-sidebar] {
 	}
 
 	.article-prose strong {
-		@apply font-semibold text-slate-900 dark:text-slate-100;
+		@apply font-semibold text-ink dark:text-stone-100;
 	}
 
 	.article-prose a:not([class]) {
-		@apply font-medium text-brand underline decoration-brand/30 underline-offset-[0.2em] transition hover:decoration-brand dark:text-blue-400 dark:decoration-blue-400/40 dark:hover:decoration-blue-400;
+		@apply font-medium text-indigo underline decoration-indigo/30 underline-offset-[0.2em] transition hover:text-brand hover:decoration-brand dark:text-stone-400 dark:decoration-stone-500/40 dark:hover:text-red-400 dark:hover:decoration-red-400;
 	}
 
 	.article-prose blockquote {
-		@apply my-6 rounded-xl border-l-4 border-brand/60 bg-blue-50/50 px-4 py-3 text-slate-600 dark:border-blue-500/50 dark:bg-blue-950/20 dark:text-slate-400;
+		@apply my-6 rounded-md border-l-4 border-brand/50 bg-paper-deep/50 px-4 py-3 text-ink-muted dark:border-red-500/40 dark:bg-stone-900/30 dark:text-stone-400;
 	}
 
 	.article-prose code:not(pre code) {
-		@apply rounded-md bg-slate-100 px-1.5 py-0.5 text-[0.9em] text-slate-800 dark:bg-slate-800 dark:text-slate-200;
+		@apply rounded-md bg-stone-100 px-1.5 py-0.5 text-[0.9em] text-ink dark:bg-stone-800 dark:text-stone-200;
 	}
 
 	.article-prose pre {
-		@apply my-6 overflow-x-auto rounded-xl border border-slate-200/80 bg-slate-50 p-4 text-sm leading-relaxed dark:border-slate-700 dark:bg-slate-900;
+		@apply my-6 overflow-x-auto rounded-lg border border-stone-200/80 bg-paper-deep/40 p-4 text-sm leading-relaxed dark:border-stone-700 dark:bg-stone-900;
 	}
 
 	.article-prose pre code {
@@ -247,26 +283,25 @@ html[data-has-sidebar] {
 	}
 
 	.article-prose table {
-		@apply my-6 w-full border-collapse overflow-hidden rounded-xl border border-slate-200/80 text-sm dark:border-slate-700;
+		@apply my-6 w-full border-collapse overflow-hidden rounded-lg border border-stone-200/80 text-sm dark:border-stone-700;
 	}
 
 	.article-prose th,
 	.article-prose td {
-		@apply border border-slate-200/80 px-3 py-2.5 text-left align-top dark:border-slate-700;
+		@apply border border-stone-200/80 px-3 py-2.5 text-left align-top dark:border-stone-700;
 	}
 
 	.article-prose th {
-		@apply bg-slate-50 font-semibold text-slate-900 dark:bg-slate-800/80 dark:text-slate-100;
+		@apply bg-paper-deep/60 font-semibold text-ink dark:bg-stone-800/80 dark:text-stone-100;
 	}
 
 	.article-prose hr {
-		@apply my-10 border-slate-200/80 dark:border-slate-800;
+		@apply my-10 border-stone-200/80 dark:border-stone-800;
 	}
 
 	.sl-markdown-content a:not([class]) {
 		text-underline-offset: 0.18em;
 	}
-
 }
 
 @media (min-width: 50rem) {
@@ -282,5 +317,21 @@ html[data-has-sidebar] {
 @media (max-width: 49.9rem) {
 	:root {
 		--qq-search-width: 11rem;
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	*,
+	*::before,
+	*::after {
+		animation-duration: 0.01ms !important;
+		animation-iteration-count: 1 !important;
+		transition-duration: 0.01ms !important;
+		scroll-behavior: auto !important;
+	}
+
+	.article-card:hover,
+	.group:hover {
+		transform: none !important;
 	}
 }

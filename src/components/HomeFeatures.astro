@@ -2,20 +2,18 @@
 const features = [
 	{
 		title: '亲戚关系计算器',
-		desc: '关系链、称呼正反查，本地即时出结果。聚会前查一查，写作时校对一下，别再叫错人。',
+		desc: '关系链、称呼正反查，本地即时出结果。聚会前查一查，别再叫错人。',
 		href: '/calc/',
 		cta: '立即使用',
-		tone: 'blue' as const,
-		icon: 'calc' as const,
+		accent: 'brand' as const,
 		highlight: '七舅姥爷 → 舅外公',
 	},
 	{
 		title: '亲戚常识',
-		desc: '俗语典故、亲缘辨析，帮你弄懂谁近谁远、为何讲究、怎样相处更有分寸。',
+		desc: '俗语典故、亲缘辨析，弄懂谁近谁远、为何讲究、怎样相处更有分寸。',
 		href: '/articles/',
 		cta: '查看全部',
-		tone: 'warm' as const,
-		icon: 'book' as const,
+		accent: 'warm' as const,
 		highlight: '亲疏 · 血缘 · 相处',
 	},
 ];
@@ -26,54 +24,33 @@ const features = [
 		features.map((item) => (
 			<a
 				class:list={[
-					'group flex flex-col gap-3 rounded-2xl border p-5 text-inherit no-underline shadow-sm transition duration-300 hover:-translate-y-0.5 hover:shadow-md sm:p-5',
-					item.tone === 'blue' &&
-						'border-blue-100/80 bg-gradient-to-br from-white to-blue-50/60 hover:border-blue-200 dark:border-blue-900/50 dark:from-slate-900 dark:to-blue-950/30 dark:hover:border-blue-800',
-					item.tone === 'warm' &&
-						'border-orange-100/80 bg-gradient-to-br from-white to-orange-50/50 hover:border-orange-200 dark:border-orange-900/40 dark:from-slate-900 dark:to-orange-950/20 dark:hover:border-orange-800',
+					'qq-feature group flex flex-col gap-3 rounded-lg border border-stone-200/90 bg-white/90 p-5 text-inherit no-underline transition dark:border-stone-700/80 dark:bg-night-card/90',
+					item.accent === 'brand' && 'border-l-4 border-l-brand',
+					item.accent === 'warm' && 'border-l-4 border-l-warm',
 				]}
 				href={item.href}
 			>
-				<div
-					class:list={[
-						'grid h-12 w-12 place-items-center rounded-xl shadow-sm',
-						item.tone === 'blue' && 'bg-brand text-white dark:bg-blue-600',
-						item.tone === 'warm' && 'bg-warm text-white dark:bg-orange-600',
-					]}
-					aria-hidden="true"
-				>
-					{item.icon === 'calc' ? (
-						<svg class="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75">
-							<rect x="4" y="3" width="16" height="18" rx="2" />
-							<path d="M8 7h8M8 11h2M12 11h2M16 11h0M8 15h2M12 15h2M16 15h0" />
-						</svg>
-					) : (
-						<svg class="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75">
-							<path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H18v18H6.5A2.5 2.5 0 0 1 4 18.5v-13Z" />
-							<path d="M8 7h8M8 11h6M8 15h4" />
-						</svg>
-					)}
-				</div>
-
 				<div class="flex flex-col gap-1.5">
-					<h3 class="text-[1.0625rem] font-semibold leading-snug text-slate-900 dark:text-slate-100">{item.title}</h3>
+					<h3 class="font-display text-[1.0625rem] font-semibold leading-snug text-ink dark:text-stone-100">
+						{item.title}
+					</h3>
 					<p
 						class:list={[
 							'text-[0.8125rem] font-medium',
-							item.tone === 'blue' && 'text-brand/80 dark:text-blue-400/80',
-							item.tone === 'warm' && 'text-warm/80 dark:text-orange-400/80',
+							item.accent === 'brand' && 'text-brand/90 dark:text-red-400/90',
+							item.accent === 'warm' && 'text-warm/90 dark:text-amber-400/90',
 						]}
 					>
 						{item.highlight}
 					</p>
-					<p class="text-[0.9375rem] leading-[1.65] text-slate-600 dark:text-slate-400">{item.desc}</p>
+					<p class="text-[0.9375rem] leading-[1.65] text-ink-muted dark:text-stone-400">{item.desc}</p>
 				</div>
 
 				<span
 					class:list={[
 						'inline-flex items-center gap-1.5 text-sm font-medium transition group-hover:gap-2',
-						item.tone === 'blue' && 'text-brand dark:text-blue-400',
-						item.tone === 'warm' && 'text-warm dark:text-orange-400',
+						item.accent === 'brand' && 'text-indigo group-hover:text-brand dark:text-stone-400 dark:group-hover:text-red-400',
+						item.accent === 'warm' && 'text-indigo group-hover:text-warm dark:text-stone-400 dark:group-hover:text-amber-400',
 					]}
 				>
 					{item.cta}
