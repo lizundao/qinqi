@@ -1,7 +1,7 @@
 export const SITE = {
   url: 'https://qinqi.wiki',
   name: '亲戚百科',
-  appName: '亲戚称呼计算器',
+  appName: '亲戚关系计算丫',
   tagline: '一句关系链，算出该怎么叫',
   description:
     '中国亲戚关系在线计算器：输入「爸爸的妈妈的兄弟」或「七舅姥爷」，本地即时算出正确称呼；支持通用、北方、广东三种叫法，并附亲戚常识与称呼速查。',

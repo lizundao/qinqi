@@ -5,7 +5,7 @@
 
 - 线上：https://qinqi.wiki
 - 源码：https://github.com/lizundao/qinqi
-- 微信小程序：「亲戚称呼计算器」，与本站共用同一套算法与十单字键盘
+- 微信小程序：「亲戚关系计算丫」，与本站共用同一套算法与十单字键盘
 
 ## 当前版本（2026-11-07 · v2 重构）
 
@@ -15,8 +15,8 @@
 | 品牌 | 宣纸米白 + 朱红，和小程序蓝底 logo 不一致 | 与小程序统一的 `#2E6BEF` 蓝色体系、圆角卡片、同款 logo |
 | 首屏 | 只有标题 + 两张功能卡，要跳转才能算 | **结果卡置顶的可用计算器**：先看答案，下面是输入与十单字键盘 |
 | 计算器 | 文本输入 + 插入「爸爸/妈妈」词块，无方言 | 十单字关系链、性别自动屏蔽、称呼反查、反向视角、通用/北方/广东、URL 分享、本地历史 |
-| 内容 | 97 篇 AI 俗语散文 + 245 个零散标签，无分类 | 97 篇「关系链 → 称呼」词条式百科、8 个受控栏目、64 个标签、每篇附实算称呼表 |
-| 封面图 | 97 张 AI 写实中国风摄影，10.2MB | 程序化品牌蓝关系链信息图，约 3MB，图文同源、可复现，页面完整不裁切 |
+| 内容 | 97 篇 AI 俗语散文 + 245 个零散标签，无分类 | 99 篇「关系链 → 称呼」词条式百科、8 个受控栏目、71 个标签、每篇附实算称呼表 |
+| 封面图 | 97 张 AI 写实中国风摄影，10.2MB | 99 张程序化品牌蓝关系链信息图，约 3.2MB，图文同源、可复现，页面完整不裁切 |
 | SEO / GEO | 无 canonical、无 sitemap、无结构化数据 | canonical / OG / JSON-LD（WebSite、WebApplication、FAQPage、Article、BreadcrumbList）/ sitemap.xml / robots.txt / llms.txt / llms-full.txt |
 | 数据可信度 | 速查类内容靠手写 | `src/data/cheats.ts` 与每篇文章的称呼表都由 `relationship.js` **实际计算**生成 |
 
@@ -31,17 +31,23 @@
 
 旧版源码与 97 张旧封面已单独备份，**不纳入本仓库**。
 
+### 2026-11-07 内容增补
+
+- 新增 2 篇词条文章：`zhou-li-lian-jin-gu-sao`（妯娌、连襟、姑嫂：平辈姻亲怎么互称）、`qi-jiu-lao-ye-shi-shui`（七舅姥爷是谁：长关系链怎么一层层拆）。文章与封面总数 97 → 99。
+- 词条新增可选字段 `cc`：自定义该篇称呼对照表的关系链，不填则沿用栏目 `CHAIN_POOL` 补两条。
+- 微信小程序名称统一为「亲戚关系计算丫」，`src/data/site.ts` 的 `SITE.appName` 是唯一真源；网页计算器组件名与 SEO 关键词仍保留「亲戚称呼计算器」，两者含义不同。
+
 ## 本地开发
 
 ```bash
 npm install
 npm run dev        # http://localhost:4321/
-npm run build      # 产物 dist/，111 个页面
+npm run build      # 产物 dist/，113 个页面
 npm run preview
 
 npm run data:cheats      # 用 relationship.js 实算，重新生成称呼速查表
-npm run content:rewrite  # 按词条数据重写 97 篇文章
-npm run content:covers   # 按文章内容重生成 97 张封面（需要 Python + Pillow）
+npm run content:rewrite  # 按词条数据重写 99 篇文章
+npm run content:covers   # 按文章内容重生成 99 张封面（需要 Python + Pillow）
 ```
 
 主要页面：
@@ -51,7 +57,7 @@ npm run content:covers   # 按文章内容重生成 97 张封面（需要 Python
 | `/` | 首页：结果置顶的计算器、第二屏小程序码、速查精选、栏目、文章、FAQ |
 | `/calc/` | 完整计算器，支持 `?chain=&sex=&reverse=&type=&mode=&optimal=` 还原 |
 | `/cheatsheet/` | 23 条常见称呼速查（可按父系/母系/祖辈/晚辈/姻亲筛选） |
-| `/articles/` | 97 篇文章，前端搜索 + 栏目筛选 + 分页 |
+| `/articles/` | 99 篇文章，前端搜索 + 栏目筛选 + 分页 |
 | `/articles/<slug>/` | 文章详情，含相关阅读与结构化数据 |
 | `/topics/<slug>/` | 8 个栏目页 |
 | `/about/` | 关于与口径说明 |
@@ -62,7 +68,7 @@ npm run content:covers   # 按文章内容重生成 97 张封面（需要 Python
 - 计算核心：[relationship.js](https://github.com/mumuy/relationship) v1.2.9（MIT，npm `relationship.js`）。
 - 方言叫法：`src/scripts/locale-data.js`，由该仓库官方 `src/locale/north.js` / `guangdong.js` 转成 ESM，数据未改动。
 - 称呼速查答案：`npm run data:cheats` 用上述库**实际计算**生成 `src/data/cheats.ts`，不要手改。
-- 文章：97 个 slug / URL 保留，正文由 `scripts/lexicon/part-1..5.mjs` 的词条数据经 `scripts/rewrite-articles.mjs` 生成。每篇的称呼对照表同样由库实算，**不要直接改 `.mdx`**，改词条数据后重跑。
+- 文章：99 篇，正文由 `scripts/lexicon/part-1..6.mjs` 的词条数据经 `scripts/rewrite-articles.mjs` 生成。已有 slug / URL / 发布日期保留；新增词条自动建文件并用当天日期。每篇的称呼对照表同样由库实算，**不要直接改 `.mdx`**，改词条数据后重跑。
 - 封面：`scripts/generate-covers.py` 直接读取文章的标题、栏目、主关系链与实算称呼绘图，因此改完文章重跑封面即可保持图文一致；字体用系统 PingFang，产物为 1200×675 WebP。
 
 ## 图片与布局约定（别改回去）
@@ -77,7 +83,7 @@ npm run content:covers   # 按文章内容重生成 97 张封面（需要 Python
 ```
 src/
 ├── content.config.ts        内容集合（原生 glob loader，替代 Starlight docsLoader）
-├── content/docs/            97 篇文章 + about.md
+├── content/docs/            99 篇文章 + about.md
 ├── data/                    站点常量、栏目、FAQ、速查表（生成）
 ├── layouts/BaseLayout.astro 全站 head / SEO / JSON-LD / 主题
 ├── components/              计算器、速查、文章卡、FAQ、小程序码、面包屑、页头页脚
@@ -88,9 +94,9 @@ src/
 public/                      favicon、logo、小程序码、OG 图、文章封面、robots.txt
 scripts/
 ├── generate-cheats.mjs      称呼速查表（实算生成）
-├── rewrite-articles.mjs     97 篇文章重写生成器
-├── lexicon/part-*.mjs       97 条词条数据（文章单一真源）
-├── generate-covers.py       97 张品牌蓝关系链封面生成器
+├── rewrite-articles.mjs     99 篇文章重写生成器
+├── lexicon/part-*.mjs       99 条词条数据（文章单一真源，分 6 个分片）
+├── generate-covers.py       99 张品牌蓝关系链封面生成器
 └── *article* / *cover*      旧版 AI 写作与生图工具（v2 不再使用）
 docs/                        旧版部署 / 写作说明，与本版有出入时以本 README 为准
 wrangler.jsonc               Workers Builds 静态资源配置（assets.directory = ./dist）
@@ -118,12 +124,12 @@ wrangler.jsonc               Workers Builds 静态资源配置（assets.director
 
 文章是**词条数据驱动**的，不要直接编辑 `.mdx`（下次重写会被覆盖）：
 
-1. 在 `scripts/lexicon/part-*.mjs` 里改对应 slug 词条：`h` 标题、`q` 引子、`a` 一句话结论、`c` 主关系链、`b` 三个要点、`m` 两个误区、`k` 附加标签、`t` 栏目。
-2. `npm run content:rewrite` 重新生成 97 篇 `.mdx`（保留 slug 与原发布日期）。
+1. 在 `scripts/lexicon/part-*.mjs` 里改对应 slug 词条：`h` 标题、`q` 引子、`a` 一句话结论、`c` 主关系链、`cc` 可选的自定义对照表链、`b` 三个要点、`m` 两个误区、`k` 附加标签、`t` 栏目、`d` 补充。
+2. `npm run content:rewrite` 重新生成 99 篇 `.mdx`（已有文章保留 slug 与原发布日期，新词条自动建文件并用当天日期）。
 3. `npm run content:covers` 按新文章重生成封面。
 4. `npm run build` 更新站点、sitemap 与 llms.txt。
 
-新增文章时先在 `src/content/docs/articles/` 建同名 `.mdx` 占位（提供 `date`），再补词条数据；`rewrite-articles.mjs` 会校验「文章文件 ↔ 词条数据」一一对应，缺一条就报错。
+新增文章直接在某个 `part-*.mjs` 追加词条即可，不必先建 `.mdx` 占位；`rewrite-articles.mjs` 会校验「已有文章文件 ↔ 词条数据」一一对应，删了词条却留着文件才报错。新增分片记得在 `rewrite-articles.mjs` 里 import 并拼进 `ENTRIES`。
 
 正文结构固定：引子 → 一句话结论 → 关系链拆解（含实算称呼对照表）→ 三个要点 → 两个常见误解 → 相关词条 → 口径说明。
 `draft: true` 仅在 dev 可见，生产构建排除。栏目由 `tags[0]`（栏目中文名）精确归类。

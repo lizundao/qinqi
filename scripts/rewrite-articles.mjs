@@ -1,8 +1,9 @@
 /**
  * 重写文章库为「亲戚称呼百科」词条。
- * - 保留全部 97 个 slug / URL，保留原发布日期，只替换标题、摘要、正文与标签
+ * - 已有文章保留 slug / URL 与原发布日期，只替换标题、摘要、正文与标签
+ * - 新增词条自动创建文件，日期用当天
  * - 称呼对照表由 relationship.js v1.2.9 实际计算，不手写
- * - 单一数据源：scripts/lexicon/*.mjs
+ * - 单一数据源：scripts/lexicon/*.mjs（按分片顺序拼接）
  * 用法：npm run content:rewrite
  */
 import { readFileSync, writeFileSync, readdirSync } from 'node:fs';
@@ -14,10 +15,11 @@ import { ENTRIES as E2 } from './lexicon/part-2.mjs';
 import { ENTRIES as E3 } from './lexicon/part-3.mjs';
 import { ENTRIES as E4 } from './lexicon/part-4.mjs';
 import { ENTRIES as E5 } from './lexicon/part-5.mjs';
+import { ENTRIES as E6 } from './lexicon/part-6.mjs';
 
 const ROOT = path.resolve(fileURLToPath(new URL('..', import.meta.url)));
 const DIR = path.join(ROOT, 'src/content/docs/articles');
-const ENTRIES = [...E1, ...E2, ...E3, ...E4, ...E5];
+const ENTRIES = [...E1, ...E2, ...E3, ...E4, ...E5, ...E6];
 
 /** 栏目中文名（同时作为受控标签，保证自动归类稳定） */
 export const TOPIC_LABEL = {
@@ -86,7 +88,10 @@ function render(entry, index) {
   const tags = [...new Set([topicLabel, ...entry.k])];
   const date = getDate(entry.s);
   const pool = CHAIN_POOL[entry.t] || CHAIN_POOL.chengwei;
-  const chains = [entry.c, ...pool.filter((x) => x !== entry.c).slice(0, 2)];
+  // 词条可用 cc 自定义对照表关系链；未填则按栏目链池补两条
+  const chains = entry.cc?.length
+    ? entry.cc
+    : [entry.c, ...pool.filter((x) => x !== entry.c).slice(0, 2)];
   const rows = chains.map((chain) => ({ chain, label: readable(chain), answer: calc(chain) }));
   const related = relatedFor(entry, index);
   const calcLink = `/calc/?chain=${encodeURIComponent(entry.c)}`;
