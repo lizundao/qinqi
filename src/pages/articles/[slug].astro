@@ -1,35 +1,113 @@
 ---
-import ToolLayout from '../../layouts/ToolLayout.astro';
-import ArticleDetail from '../../components/ArticleDetail.astro';
-import { getArticleBySlug, getArticleSlug, getArticles, getArticleCover } from '../../utils/articles';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import ArticleCard from '../../components/ArticleCard.astro';
+import { SITE } from '../../data/site';
+import { TOPICS, topicHref } from '../../data/topics';
+import { getArticles, getArticleBySlug, getRelatedArticles } from '../../utils/articles';
 import { renderArticleMarkdown } from '../../utils/renderArticleMarkdown';
 
 export async function getStaticPaths() {
-	const articles = await getArticles();
-
-	return articles.map((entry) => ({
-		params: { slug: getArticleSlug(entry) },
-	}));
+  const articles = await getArticles();
+  return articles.map((article) => ({ params: { slug: article.slug } }));
 }
 
-const slug = Astro.params.slug!;
-const entry = await getArticleBySlug(slug);
+const { slug } = Astro.params;
+const found = await getArticleBySlug(slug!);
+if (!found) return Astro.redirect('/404/');
 
-if (!entry) {
-	return Astro.redirect('/404');
-}
-
+const { entry, view } = found;
 const articleHtml = await renderArticleMarkdown(entry);
+const related = await getRelatedArticles(view, 3);
+
+const articleLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Article',
+  headline: view.title,
+  description: view.description,
+  inLanguage: 'zh-CN',
+  mainEntityOfPage: new URL(view.href, SITE.url).href,
+  ...(view.date ? { datePublished: view.date.toISOString().slice(0, 10) } : {}),
+  ...(view.cover ? { image: new URL(view.cover, SITE.url).href } : {}),
+  author: { '@type': 'Organization', name: SITE.name, url: SITE.url },
+  publisher: { '@type': 'Organization', name: SITE.name, url: SITE.url },
+  keywords: view.tags.join(', '),
+  articleSection: view.topic.title,
+};
 ---
 
-<ToolLayout title={entry.data.title} description={entry.data.description}>
-	<ArticleDetail
-		title={entry.data.title}
-		description={entry.data.description}
-		date={entry.data.date}
-		tags={entry.data.tags}
-		cover={getArticleCover(entry)}
-	>
-		<div set:html={articleHtml} />
-	</ArticleDetail>
-</ToolLayout>
+<BaseLayout
+  title={view.title}
+  description={view.description}
+  keywords={view.tags.join(',')}
+  ogType="article"
+  publishedTime={view.date?.toISOString().slice(0, 10)}
+  jsonLd={[articleLd]}
+>
+  <div class="container article-wrap">
+    <article>
+      <Breadcrumbs
+        items={[
+          { label: '亲戚常识', href: '/articles/' },
+          { label: view.topic.title, href: topicHref(view.topic.slug) },
+          { label: view.title },
+        ]}
+      />
+
+      <h1 class="page-head__title" style="margin-top:20px;font-size:clamp(1.8rem,3.6vw,2.5rem)">{view.title}</h1>
+      <p class="page-head__desc" style="font-size:1rem">{view.description}</p>
+
+      <div class="article-meta">
+        {view.dateLabel && <span>发布于 {view.dateLabel}</span>}
+        <a class="tag" href={topicHref(view.topic.slug)}>{view.topic.title}</a>
+        <span>{view.tags.length} 个标签</span>
+      </div>
+      <div class="article-tags">
+        {view.tags.slice(0, 6).map((tag) => <span class="tag">{tag}</span>)}
+      </div>
+
+      {view.cover && (
+        <img class="article-hero__cover" src={view.cover} alt={view.title} loading="lazy" width="1200" height="675" />
+      )}
+
+      <div class="prose" set:html={articleHtml} />
+
+      <div class="notice" style="margin-top:40px">
+        想弄清某个人具体该怎么叫？用
+        <a href="/calc/" style="color:var(--blue);text-decoration:underline;font-weight:700">亲戚关系计算器</a>
+        拼一条关系链；常见关系也可以直接查
+        <a href="/cheatsheet/" style="color:var(--blue);text-decoration:underline;font-weight:700">称呼速查表</a>。
+      </div>
+
+      <div class="section__head" style="margin-top:48px;margin-bottom:16px">
+        <h2 class="section__title" style="font-size:1.3rem">接着读</h2>
+        <a class="section__more" href={topicHref(view.topic.slug)}>更多{view.topic.title} →</a>
+      </div>
+      <div class="article-grid" style="grid-template-columns:repeat(auto-fit,minmax(220px,1fr))">
+        {related.map((item) => <ArticleCard article={item} />)}
+      </div>
+    </article>
+
+    <aside class="article-aside">
+      <div class="aside-card">
+        <h3 class="aside-card__title">本页导航</h3>
+        <a href="/calc/">在线称呼计算器</a>
+        <a href="/cheatsheet/">常见称呼速查</a>
+        <a href="/articles/">全部常识文章</a>
+        <a href={topicHref(view.topic.slug)}>{view.topic.title}栏目</a>
+      </div>
+      <div class="aside-card">
+        <h3 class="aside-card__title">其他栏目</h3>
+        {TOPICS.filter((t) => t.slug !== view.topic.slug).slice(0, 5).map((topic) => (
+          <a href={topicHref(topic.slug)}>{topic.title}</a>
+        ))}
+      </div>
+      <div class="aside-card" style="background:var(--blue-soft);border-color:transparent">
+        <h3 class="aside-card__title">手机上也能查</h3>
+        <p style="font-size:.84rem;color:var(--ink-2);line-height:1.8">
+          微信搜索「{SITE.appName}」，与本站同一套算法与单字键盘。
+        </p>
+      </div>
+    </aside>
+  </div>
+</BaseLayout>

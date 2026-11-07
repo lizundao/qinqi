@@ -1,27 +1,56 @@
 ---
-import { getEntry, render } from 'astro:content';
-import ToolLayout from '../layouts/ToolLayout.astro';
-import ArticleDetail from '../components/ArticleDetail.astro';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+import { getEntry } from 'astro:content';
+import { renderArticleMarkdown } from '../utils/renderArticleMarkdown';
+import { SITE } from '../data/site';
 
 const entry = await getEntry('docs', 'about');
+if (!entry) return Astro.redirect('/404/');
+const html = await renderArticleMarkdown(entry);
 
-if (!entry) {
-	return Astro.redirect('/404');
-}
-
-const { Content } = await render(entry);
+const aboutLd = {
+  '@context': 'https://schema.org',
+  '@type': 'AboutPage',
+  name: entry.data.title,
+  url: new URL('/about/', SITE.url).href,
+  description: entry.data.description,
+  mainEntity: { '@type': 'Organization', name: SITE.name, url: SITE.url },
+};
 ---
 
-<ToolLayout title={entry.data.title} description={entry.data.description}>
-	<ArticleDetail
-		title={entry.data.title}
-		description={entry.data.description}
-		sectionLabel="关于"
-		backHref="/"
-		backLabel="返回首页"
-		footerHref="/"
-		footerLabel="返回首页"
-	>
-		<Content />
-	</ArticleDetail>
-</ToolLayout>
+<BaseLayout
+  title={entry.data.title}
+  description={entry.data.description || `关于${SITE.name}：算法来源、隐私边界与内容说明。`}
+  jsonLd={[aboutLd]}
+>
+  <div class="container page-head">
+    <Breadcrumbs items={[{ label: entry.data.title }]} />
+    <h1 class="page-head__title">{entry.data.title}</h1>
+    {entry.data.description && <p class="page-head__desc">{entry.data.description}</p>}
+  </div>
+
+  <section class="section" style="padding-top:24px">
+    <div class="container">
+      <div class="prose" style="max-width:760px" set:html={html} />
+
+      <div class="steps" style="margin-top:44px">
+        <div class="step">
+          <span class="step__num">①</span>
+          <h3 class="step__title">算法来源</h3>
+          <p class="step__desc">计算核心为 <a href={SITE.lib} target="_blank" rel="noopener">relationship.js</a> v{SITE.libVersion}（MIT），方言数据取自该仓库官方 north / guangdong 文件，未改写。</p>
+        </div>
+        <div class="step">
+          <span class="step__num">②</span>
+          <h3 class="step__title">隐私边界</h3>
+          <p class="step__desc">纯静态站点，无后端、无登录、无埋点；输入只在浏览器内计算，历史记录也只存在你本机 localStorage。</p>
+        </div>
+        <div class="step">
+          <span class="step__num">③</span>
+          <h3 class="step__title">结果口径</h3>
+          <p class="step__desc">各地叫法差异很大，工具给的是常见通用口径与两种方言对照，实际称呼以家里习惯为准。</p>
+        </div>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

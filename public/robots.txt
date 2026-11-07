@@ -1,0 +1,30 @@
+User-agent: *
+Allow: /
+Disallow: /404/
+
+# AI 搜索 / 大模型抓取：明确允许，站点提供 llms.txt 事实清单
+User-agent: GPTBot
+Allow: /
+
+User-agent: OAI-SearchBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+User-agent: Bingbot
+Allow: /
+
+User-agent: Bytespider
+Allow: /
+
+Sitemap: https://qinqi.wiki/sitemap.xml

@@ -1,8 +1,6 @@
 ---
 title: 关于
 description: 亲戚百科的初心：在涣散的亲情里，帮大家搞清称呼、读懂亲缘、珍重相处。
-sidebar:
-  hidden: true
 ---
 
 ## 为什么做亲戚百科
@@ -18,37 +16,19 @@ sidebar:
 
 ## 网站提供什么
 
-1. **在线计算器** — 基于 [relationship.js](https://github.com/mumuy/relationship) 在浏览器本地计算称呼，支持关系链、反向查询与自然语言
-2. **亲戚常识** — 俗语典故、亲缘辨析，读懂习俗与相处里的分寸
+1. **在线计算器** — 拼「父、母、兄、姐、夫、妻、弟、妹、子、女」十个单字组成关系链，或直接输入「妈妈的妈妈的兄弟」；也支持称呼反查、反向视角，以及通用、北方、广东三种叫法。
+2. **常见称呼速查** — 23 条「关系 → 称呼」的明文答案，每条都由算法实际计算生成，可直接点开改写成你自己的关系链。
+3. **亲戚常识** — 97 篇俗语典故、称呼辨析与亲缘相处文章，按 8 个栏目整理。
+4. **微信小程序** — 「亲戚称呼计算器」与本站同源，适合在手机上随时查。
 
-## 开源致谢
+## 隐私与口径
 
-计算器核心算法来自 [mumuy/relationship](https://github.com/mumuy/relationship)（MIT 协议）。  
-演示参考：[passer-by.com/relationship](https://passer-by.com/relationship/)
+本站是纯静态站点：没有后端接口、没有登录、没有埋点统计。你输入的关系链只在浏览器本地计算，历史记录也只存在自己设备的 localStorage 里。
 
-使用、修改、分发时请保留原作者版权与许可声明。
+计算核心来自 [mumuy/relationship](https://github.com/mumuy/relationship)（MIT 协议）v1.2.9，北方 / 广东叫法使用该仓库官方方言数据，未作改写。各地实际称呼差异很大，本站给的是常见口径，仅供参考——家里怎么叫，还是以家里习惯为准。
 
-## 部署
+## 开源
 
-本站为 Astro 静态站点，构建产物在 `dist/` 目录。
+站点源码：[github.com/lizundao/qinqi](https://github.com/lizundao/qinqi)。使用、修改、分发时请保留 relationship.js 原作者版权与 MIT 许可声明。
 
-| 配置项 | 值 |
-| --- | --- |
-| Build command | `npm run build` |
-| Deploy command | `npx wrangler deploy` |
-
-详细步骤见仓库 [docs/deploy-cloudflare-pages.md](https://github.com/lizundao/qinqi/blob/main/docs/deploy-cloudflare-pages.md)。
-
-## 写文章
-
-亲戚常识文章放在 `src/content/docs/articles/`，使用 `.mdx` 格式，文件名即 URL 路径。
-
-```yaml
----
-title: 文章标题
-description: 摘要，用于 SEO
-date: 2026-05-31
-tags: [习俗, 舅舅]
-draft: false
----
-```
+给搜索引擎与 AI 的事实清单：[llms.txt](/llms.txt)、[完整内容索引](/llms-full.txt)、[站点地图](/sitemap.xml)。

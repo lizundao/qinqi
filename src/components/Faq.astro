@@ -1,0 +1,20 @@
+---
+import { FAQ, type FaqItem } from '../data/faq';
+
+interface Props {
+  items?: FaqItem[];
+  limit?: number;
+}
+
+const { items = FAQ, limit } = Astro.props;
+const shown = limit ? items.slice(0, limit) : items;
+---
+
+<div class="faq">
+  {shown.map((item, index) => (
+    <details class="faq__item" open={index === 0}>
+      <summary class="faq__q">{item.q}</summary>
+      <div class="faq__a">{item.a}</div>
+    </details>
+  ))}
+</div>

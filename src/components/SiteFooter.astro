@@ -1,60 +1,49 @@
 ---
-const year = new Date().getFullYear();
+import { SITE, NAV } from '../data/site';
+import { TOPICS, topicHref } from '../data/topics';
 
-const navItems = [
-	{ label: '首页', href: '/' },
-	{ label: '在线计算器', href: '/calc/' },
-	{ label: '亲戚常识', href: '/articles/' },
-	{ label: '关于', href: '/about/' },
-];
+const year = new Date().getFullYear();
 ---
 
-<footer class="site-footer mt-auto border-t border-stone-200/80 bg-paper dark:border-stone-800 dark:bg-night">
-	<div class="site-container py-8 lg:py-10">
-		<div class="flex flex-col gap-6 sm:flex-row sm:items-start sm:justify-between">
-			<div class="space-y-2">
-				<a
-					href="/"
-					class="font-brand inline-block text-[1.05rem] font-normal tracking-[0.06em] text-ink no-underline dark:text-stone-100"
-				>
-					亲戚百科
-				</a>
-				<p class="max-w-sm text-sm leading-relaxed text-ink-muted dark:text-stone-400">
-					搞清称呼，读懂亲缘。辨别亲疏、理智看待血缘、珍重亲情、注重日常相处。
-				</p>
-			</div>
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer__grid">
+      <div class="footer__brand">
+        <a class="brand" href="/">
+          <img class="brand__mark" src="/favicon.svg" width="36" height="36" alt="" />
+          <span class="brand__name">{SITE.name}</span>
+        </a>
+        <p>
+          把亲戚关系一次算清楚。关系链、称呼正反查、方言叫法都在浏览器本地完成；
+          另有亲戚常识文章，讲清称呼背后的亲缘与分寸。
+        </p>
+      </div>
 
-			<nav class="flex flex-wrap gap-x-5 gap-y-2" aria-label="页脚导航">
-				{
-					navItems.map((item) => (
-						<a
-							href={item.href}
-							class="text-sm text-ink-muted no-underline transition hover:text-indigo dark:text-stone-400 dark:hover:text-stone-200"
-						>
-							{item.label}
-						</a>
-					))
-				}
-			</nav>
-		</div>
+      <div class="footer__col">
+        <h3>工具</h3>
+        {NAV.map((item) => <a href={item.href}>{item.label}</a>)}
+        <a href="/calc/?chain=%E7%88%B6%E7%9A%84%E7%88%B6">试试「爷爷」怎么算</a>
+      </div>
 
-		<div
-			class="mt-6 flex flex-col gap-3 border-t border-stone-200/70 pt-6 text-xs text-stone-400 sm:flex-row sm:items-center sm:justify-between dark:border-stone-800 dark:text-stone-500"
-		>
-			<p>© {year} 亲戚百科 · qinqi.wiki</p>
-			<a
-				href="https://github.com/lizundao/qinqi"
-				class="inline-flex items-center gap-1.5 text-stone-400 no-underline transition hover:text-ink-muted dark:hover:text-stone-300"
-				target="_blank"
-				rel="noopener"
-			>
-				<svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-					<path
-						d="M12 .3a12 12 0 0 0-3.8 23.38c.6.12.83-.26.83-.57L9 21.07c-3.34.72-4.04-1.61-4.04-1.61-.55-1.39-1.34-1.76-1.34-1.76-1.08-.74.09-.73.09-.73 1.2.09 1.83 1.24 1.83 1.24 1.08 1.83 2.81 1.3 3.5 1 .1-.78.42-1.31.76-1.61-2.67-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.14-.3-.54-1.52.1-3.18 0 0 1-.32 3.3 1.23a11.5 11.5 0 0 1 6 0c2.28-1.55 3.29-1.23 3.29-1.23.64 1.66.24 2.88.12 3.18a4.65 4.65 0 0 1 1.23 3.22c0 4.61-2.8 5.63-5.48 5.92.42.36.81 1.1.81 2.22l-.01 3.29c0 .31.2.69.82.57A12 12 0 0 0 12 .3Z"
-					></path>
-				</svg>
-				GitHub
-			</a>
-		</div>
-	</div>
+      <div class="footer__col">
+        <h3>亲戚常识栏目</h3>
+        {TOPICS.slice(0, 5).map((topic) => <a href={topicHref(topic.slug)}>{topic.title}</a>)}
+        <a href="/articles/">全部文章</a>
+      </div>
+
+      <div class="footer__col">
+        <h3>关于</h3>
+        <a href="/about/">关于本站</a>
+        <a href="/llms.txt">llms.txt</a>
+        <a href="/sitemap.xml">站点地图</a>
+        <a href={SITE.github} target="_blank" rel="noopener">GitHub 源码</a>
+        <a href={SITE.lib} target="_blank" rel="noopener">relationship.js</a>
+      </div>
+    </div>
+
+    <div class="footer__bottom">
+      <span>© {year} {SITE.name} · 内容与算法开源，计算在你本机完成</span>
+      <span>算法基于 relationship.js v{SITE.libVersion}（MIT）· 微信小程序「{SITE.appName}」同源</span>
+    </div>
+  </div>
 </footer>

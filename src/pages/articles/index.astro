@@ -1,11 +1,87 @@
 ---
-import ToolLayout from '../../layouts/ToolLayout.astro';
-import ArticlesPage from '../../components/ArticlesPage.astro';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import ArticleCard from '../../components/ArticleCard.astro';
+import { TOPICS, topicHref } from '../../data/topics';
+import { getArticles, getTopicGroups } from '../../utils/articles';
+import { SITE } from '../../data/site';
+
+const articles = await getArticles();
+const groups = await getTopicGroups();
+
+const collectionLd = {
+  '@context': 'https://schema.org',
+  '@type': 'CollectionPage',
+  name: '亲戚常识文章库',
+  url: new URL('/articles/', SITE.url).href,
+  description: '中国亲戚习俗、称呼文化与亲缘相处的科普文章，按 8 个栏目整理。',
+  numberOfItems: articles.length,
+  mainEntity: {
+    '@type': 'ItemList',
+    itemListElement: articles.slice(0, 20).map((article, index) => ({
+      '@type': 'ListItem',
+      position: index + 1,
+      name: article.title,
+      url: new URL(article.href, SITE.url).href,
+    })),
+  },
+};
 ---
 
-<ToolLayout
-	title="亲戚常识"
-	description="中国亲戚习俗与称呼文化科普，弄懂娘亲舅大、堂表侄甥等常识。"
+<BaseLayout
+  title="亲戚常识"
+  description={`${articles.length} 篇中国亲戚习俗、称呼文化与亲缘相处文章，按称呼辨析、兄弟姐妹、俗语典故、宗族与家族等栏目整理，支持搜索与筛选。`}
+  keywords="亲戚常识,亲戚习俗,称呼文化,堂表亲,俗语典故,家族观念,亲缘关系"
+  jsonLd={[collectionLd]}
 >
-	<ArticlesPage />
-</ToolLayout>
+  <div class="container page-head">
+    <Breadcrumbs items={[{ label: '亲戚常识' }]} />
+    <h1 class="page-head__title">亲戚常识</h1>
+    <p class="page-head__desc">
+      不只分清堂表侄甥，也读懂亲缘里的分寸与智慧。共 {articles.length} 篇，按栏目整理，可直接搜索。
+    </p>
+  </div>
+
+  <section class="section" style="padding-top:24px">
+    <div class="container">
+      <label class="search-bar">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+          <circle cx="11" cy="11" r="7" /><path d="m20 20-3.5-3.5" stroke-linecap="round" />
+        </svg>
+        <input type="search" data-search placeholder="搜索文章标题、摘要或标签" aria-label="搜索文章" />
+      </label>
+
+      <div class="filter-bar" data-topic-filters>
+        <button class="chip is-active" type="button" data-topic-filter="all">全部 {articles.length}</button>
+        {groups.map(({ topic, count }) => (
+          <button class="chip" type="button" data-topic-filter={topic.slug}>{topic.title} {count}</button>
+        ))}
+      </div>
+
+      <p style="color:var(--muted);font-size:.84rem;margin-bottom:18px" data-result-count>
+        共 {articles.length} 篇
+      </p>
+
+      <div class="article-grid" data-article-grid>
+        {articles.map((article) => <ArticleCard article={article} />)}
+      </div>
+
+      <div class="empty-state" data-empty hidden>没有匹配的文章，换个关键词试试。</div>
+
+      <div class="pagination" data-pagination>
+        <button type="button" data-page="prev">上一页</button>
+        <span data-page-label>1 / 1</span>
+        <button type="button" data-page="next">下一页</button>
+      </div>
+
+      <div class="notice" style="margin-top:40px">
+        想按栏目顺着一个主题读？<strong>栏目页</strong>把同一主题的文章和内链收在一起：
+        <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:12px">
+          {TOPICS.map((topic) => <a class="chip" href={topicHref(topic.slug)}>{topic.title}</a>)}
+        </div>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<script src="../../scripts/articles-filter.js"></script>

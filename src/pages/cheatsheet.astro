@@ -1,0 +1,79 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+import CheatSheet from '../components/CheatSheet.astro';
+import { CHEATS } from '../data/cheats';
+import { SITE } from '../data/site';
+
+const faqLd = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: CHEATS.map((item) => ({
+    '@type': 'Question',
+    name: `${item.q}叫什么？`,
+    acceptedAnswer: {
+      '@type': 'Answer',
+      text: `${item.q}，通用叫法是「${item.answer}」。${item.alt.length ? `也可叫${item.alt.map((x) => `「${x}」`).join('、')}。` : ''}关系链：${item.chain}。数据由 relationship.js v${SITE.libVersion} 计算得出。`,
+    },
+  })),
+};
+---
+
+<BaseLayout
+  title="常见亲戚称呼速查表"
+  description="23 条常见亲戚关系与对应称呼：爸爸的爸爸、妈妈的妈妈的兄弟、姐姐的老公……答案由 relationship.js 实际计算生成，可点击直达计算器改写成自己的关系链。"
+  keywords="称呼速查,亲戚称呼表,爸爸的爸爸叫什么,妈妈的兄弟,舅外公,岳母,姐夫,侄子,外甥"
+  jsonLd={[faqLd]}
+>
+  <div class="container page-head">
+    <Breadcrumbs items={[{ label: '称呼速查' }]} />
+    <h1 class="page-head__title">常见亲戚称呼速查表</h1>
+    <p class="page-head__desc">
+      按父系、母系、祖辈、晚辈、姻亲分组。每条答案都由计算核心实际算出，不是手抄的称谓表；
+      点任意一条，可在计算器里继续拼接或切换方言。
+    </p>
+  </div>
+
+  <section class="section" style="padding-top:26px">
+    <div class="container">
+      <CheatSheet filters={true} />
+      <div class="notice" style="margin-top:26px">
+        <strong>口径说明：</strong>以下是「通用」叫法，同一关系在不同地区可能不同。
+        例如「妈妈的妈妈」通用叫外婆，北方常叫姥姥；「爸爸」在广东话里叫老窦。
+        在 <a href="/calc/" style="color:var(--blue);text-decoration:underline">计算器</a> 里切换「叫法地区」即可对照。
+        算法来自 <a href={SITE.lib} target="_blank" rel="noopener" style="color:var(--blue);text-decoration:underline">relationship.js</a> v{SITE.libVersion}（MIT）。
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--tint">
+    <div class="container">
+      <div class="section__head">
+        <div>
+          <h2 class="section__title">三条最容易混的规则</h2>
+        </div>
+      </div>
+      <div class="steps">
+        <div class="step">
+          <span class="step__num">1</span>
+          <h3 class="step__title">父系 vs 母系</h3>
+          <p class="step__desc">爸爸的兄弟叫伯父 / 叔叔，爸爸的姐妹叫姑妈；妈妈的兄弟叫舅舅，妈妈的姐妹叫姨妈。父系与母系从第一字就分开了。</p>
+        </div>
+        <div class="step">
+          <span class="step__num">2</span>
+          <h3 class="step__title">堂 vs 表</h3>
+          <p class="step__desc">一般父系兄弟的子女为「堂」，其余同辈亲戚多为「表」。姑妈、舅舅、姨妈家的孩子都是表兄弟姐妹。</p>
+        </div>
+        <div class="step">
+          <span class="step__num">3</span>
+          <h3 class="step__title">姻亲是另一条线</h3>
+          <p class="step__desc">配偶的父母（岳父母 / 公婆）、兄弟姐妹的配偶（嫂子 / 姐夫 / 弟媳）都由婚姻连接，用「夫」「妻」接入关系链即可。</p>
+        </div>
+      </div>
+      <div style="margin-top:24px;display:flex;flex-wrap:wrap;gap:12px">
+        <a class="btn btn--primary" href="/calc/">自己拼一条关系链 →</a>
+        <a class="btn btn--outline" href="/articles/">读亲戚常识文章</a>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

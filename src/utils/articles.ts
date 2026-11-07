@@ -1,54 +1,93 @@
 import { getCollection, type CollectionEntry } from 'astro:content';
+import { matchTopic, TOPICS, TOPIC_BY_LABEL, type Topic } from '../data/topics';
 
 export type ArticleEntry = CollectionEntry<'docs'>;
 
-const INDEX_SLUGS = new Set(['index', 'articles']);
-
-export function getArticleSlug(entry: ArticleEntry) {
-	const id = entry.id.replace(/\\/g, '/');
-	const slug = id.replace(/^articles\//, '').replace(/\.mdx?$/, '');
-	return slug;
+export interface ArticleView {
+  slug: string;
+  href: string;
+  title: string;
+  description: string;
+  date?: Date;
+  dateLabel: string;
+  tags: string[];
+  cover?: string;
+  topic: Topic;
 }
 
-/** draft 文章仅在开发环境展示；生产构建排除 */
-export function isDraftEntry(entry: ArticleEntry) {
-	return entry.data.draft === true;
+function slugOf(entry: ArticleEntry) {
+  return entry.id.replace(/\\/g, '/').replace(/^articles\//, '').replace(/\.mdx?$/, '');
 }
 
-export function isArticleVisible(entry: ArticleEntry) {
-	if (isDraftEntry(entry) && import.meta.env.PROD) return false;
-	return true;
+function formatDate(date?: Date) {
+  if (!date) return '';
+  return new Intl.DateTimeFormat('zh-CN', {
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+    timeZone: 'Asia/Shanghai',
+  }).format(date);
+}
+
+export function toView(entry: ArticleEntry): ArticleView {
+  const slug = slugOf(entry);
+  const { title, description, date, tags = [], cover } = entry.data;
+  return {
+    slug,
+    href: `/articles/${slug}/`,
+    title,
+    description,
+    date,
+    dateLabel: formatDate(date),
+    tags,
+    cover: cover?.trim() || undefined,
+    topic: TOPIC_BY_LABEL[tags[0]] ?? matchTopic(tags, title, description),
+  };
 }
 
 export function isArticleEntry(entry: ArticleEntry) {
-	if (!isArticleVisible(entry)) return false;
-
-	const slug = getArticleSlug(entry);
-	if (!slug || INDEX_SLUGS.has(slug)) return false;
-
-	const id = entry.id.replace(/\\/g, '/');
-	return id.startsWith('articles/') || id.startsWith('articles\\');
+  const id = entry.id.replace(/\\/g, '/');
+  if (!id.startsWith('articles/')) return false;
+  if (entry.data.draft && import.meta.env.PROD) return false;
+  return true;
 }
 
-export function getArticleHref(entry: ArticleEntry) {
-	return `/articles/${getArticleSlug(entry)}/`;
-}
-
-/** 文章封面（public 路径），无则 undefined */
-export function getArticleCover(entry: ArticleEntry) {
-	const cover = entry.data.cover?.trim();
-	return cover || undefined;
-}
-
-export async function getArticles() {
-	return (await getCollection('docs')).filter(isArticleEntry).sort((a, b) => {
-		const dateA = a.data.date instanceof Date ? a.data.date.getTime() : 0;
-		const dateB = b.data.date instanceof Date ? b.data.date.getTime() : 0;
-		return dateB - dateA;
-	});
+export async function getArticles(): Promise<ArticleView[]> {
+  const entries = (await getCollection('docs')).filter(isArticleEntry);
+  return entries
+    .map(toView)
+    .sort((a, b) => (b.date?.getTime() ?? 0) - (a.date?.getTime() ?? 0));
 }
 
 export async function getArticleBySlug(slug: string) {
-	const articles = await getArticles();
-	return articles.find((entry) => getArticleSlug(entry) === slug);
+  const entries = (await getCollection('docs')).filter(isArticleEntry);
+  const entry = entries.find((item) => slugOf(item) === slug);
+  return entry ? { entry, view: toView(entry) } : undefined;
+}
+
+export async function getTopicGroups() {
+  const articles = await getArticles();
+  return TOPICS.map((topic) => ({
+    topic,
+    count: articles.filter((article) => article.topic.slug === topic.slug).length,
+  })).filter((group) => group.count > 0);
+}
+
+export async function getArticlesByTopic(slug: string) {
+  return (await getArticles()).filter((article) => article.topic.slug === slug);
+}
+
+/** 相关文章：同栏目优先，其次标签重合，最后按日期补齐 */
+export async function getRelatedArticles(view: ArticleView, limit = 3) {
+  const articles = (await getArticles()).filter((item) => item.slug !== view.slug);
+  const scored = articles.map((item) => {
+    let score = 0;
+    if (item.topic.slug === view.topic.slug) score += 4;
+    score += item.tags.filter((tag) => view.tags.includes(tag)).length * 2;
+    return { item, score };
+  });
+  return scored
+    .sort((a, b) => b.score - a.score || (b.item.date?.getTime() ?? 0) - (a.item.date?.getTime() ?? 0))
+    .slice(0, limit)
+    .map(({ item }) => item);
 }

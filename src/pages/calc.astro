@@ -1,11 +1,100 @@
 ---
-import ToolLayout from '../layouts/ToolLayout.astro';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
 import Calculator from '../components/Calculator.astro';
+import CheatSheet from '../components/CheatSheet.astro';
+import Faq from '../components/Faq.astro';
+import { SITE } from '../data/site';
+
+const appLd = {
+  '@context': 'https://schema.org',
+  '@type': 'WebApplication',
+  name: `${SITE.appName} · 网页版`,
+  url: new URL('/calc/', SITE.url).href,
+  applicationCategory: 'UtilitiesApplication',
+  operatingSystem: 'Web',
+  browserRequirements: '需要 JavaScript（计算在浏览器本地完成）',
+  inLanguage: 'zh-CN',
+  description:
+    '输入关系链或称呼，本地算出中国亲戚称谓；支持称呼反查、反向视角、通用/北方/广东叫法与结果分享链接。',
+  featureList: ['十单字关系链键盘', '称呼 → 关系', '我称呼对方 / 对方称呼我', '北方方言', '广东方言', '分享链接还原'],
+  offers: { '@type': 'Offer', price: '0', priceCurrency: 'CNY' },
+  isAccessibleForFree: true,
+};
 ---
 
-<ToolLayout
-	title="亲戚关系计算器"
-	description="输入关系链或称呼，本地即时算出正确叫法。聚会、写作前查一查，支持反向查询与自然语言。"
+<BaseLayout
+  title="亲戚关系计算器"
+  description="输入关系链或称呼，浏览器本地即时算出正确叫法。支持称呼反查、反向视角与通用/北方/广东三种叫法，附使用说明与常见称呼速查。"
+  keywords="亲戚关系计算器,称呼计算器,关系链计算,七舅姥爷,堂表亲,北方叫法,广东叫法"
+  jsonLd={[appLd]}
 >
-	<Calculator />
-</ToolLayout>
+  <div class="container page-head">
+    <Breadcrumbs items={[{ label: '称呼计算器' }]} />
+    <h1 class="page-head__title">亲戚关系计算器</h1>
+    <p class="page-head__desc">
+      拼一条关系链，或输入一个称呼让工具反查。计算在浏览器本地完成，不上传、不记录。
+    </p>
+  </div>
+
+  <div class="container" style="padding-block:24px 12px">
+    <Calculator variant="full" />
+  </div>
+
+  <section class="section">
+    <div class="container">
+      <div class="section__head">
+        <div>
+          <h2 class="section__title">怎么用</h2>
+          <p class="section__desc">单字是关系原语，组合起来就是任意长度的亲戚链。</p>
+        </div>
+      </div>
+      <div class="steps">
+        <div class="step">
+          <span class="step__num">父</span>
+          <h3 class="step__title">十个单字 = 十种关系</h3>
+          <p class="step__desc">父、母、兄、姐、夫、妻、弟、妹、子、女。例如「父的父」是爷爷，「母的母的兄」是舅外公。</p>
+        </div>
+        <div class="step">
+          <span class="step__num">↔</span>
+          <h3 class="step__title">正反都能查</h3>
+          <p class="step__desc">「关系 → 称呼」拼链算叫法；切到「称呼 → 关系」，输入「舅公」看它对应的关系链。</p>
+        </div>
+        <div class="step">
+          <span class="step__num">◎</span>
+          <h3 class="step__title">性别自动约束</h3>
+          <p class="step__desc">链末端是男的，就不会让你再接「夫」；是女的，不会再接「妻」。兄弟姐妹等键始终可用。</p>
+        </div>
+      </div>
+      <div class="notice" style="margin-top:18px">
+        整句问法也支持，例如「舅妈如何称呼外婆？」「七舅姥爷是谁」，工具会走自然语言解析。
+        链接里的 <code>?chain=</code> 参数可把关系链、性别、方向、方言一起分享给别人。
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--tint">
+    <div class="container">
+      <div class="section__head">
+        <div>
+          <h2 class="section__title">常见称呼速查</h2>
+          <p class="section__desc">答案由 relationship.js v{SITE.libVersion} 实际计算生成，点击可在上方计算器打开。</p>
+        </div>
+        <a class="section__more" href="/cheatsheet/">全部 23 条 →</a>
+      </div>
+      <CheatSheet limit={8} />
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <div class="section__head">
+        <div>
+          <h2 class="section__title">关于结果与隐私</h2>
+        </div>
+        <a class="section__more" href="/#faq">更多常见问题 →</a>
+      </div>
+      <Faq limit={6} />
+    </div>
+  </section>
+</BaseLayout>

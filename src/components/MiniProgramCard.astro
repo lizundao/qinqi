@@ -1,0 +1,22 @@
+---
+import { SITE } from '../data/site';
+---
+
+<section class="mp-card" aria-label="微信小程序">
+  <div class="mp-card__qr">
+    <img src={SITE.wxacode} alt="微信小程序「亲戚称呼计算器」小程序码" loading="lazy" width="320" height="320" />
+  </div>
+  <div class="mp-card__body">
+    <h2 class="mp-card__title">装进口袋，随时查称呼</h2>
+    <p class="mp-card__desc">
+      微信搜索「{SITE.appName}」或扫码打开小程序。和本站用的是同一套算法与十单字键盘，
+      过年走亲戚、临时被介绍长辈时，打开就能算。
+    </p>
+    <div class="mp-card__points">
+      <span>本地计算</span>
+      <span>三种叫法</span>
+      <span>关系链 / 称呼互查</span>
+      <span>分享结果</span>
+    </div>
+  </div>
+</section>

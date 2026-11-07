@@ -1,0 +1,16 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout title="页面不存在" description="没有找到这个页面。">
+  <div class="container page-head" style="padding-bottom:60px">
+    <h1 class="page-head__title">404 · 没找到这一页</h1>
+    <p class="page-head__desc">链接可能失效了。你可以从下面几个入口重新开始。</p>
+    <div style="display:flex;flex-wrap:wrap;gap:12px;margin-top:28px">
+      <a class="btn btn--primary" href="/">回首页</a>
+      <a class="btn btn--outline" href="/calc/">去算称呼</a>
+      <a class="btn btn--outline" href="/cheatsheet/">称呼速查表</a>
+      <a class="btn btn--outline" href="/articles/">亲戚常识</a>
+    </div>
+  </div>
+</BaseLayout>

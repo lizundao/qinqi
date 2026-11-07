@@ -1,163 +1,201 @@
 ---
-const tokens = [
-	{ label: '父', value: '爸爸' },
-	{ label: '母', value: '妈妈' },
-	{ label: '夫', value: '老公' },
-	{ label: '妻', value: '老婆' },
-	{ label: '兄', value: '哥哥' },
-	{ label: '弟', value: '弟弟' },
-	{ label: '姐', value: '姐姐' },
-	{ label: '妹', value: '妹妹' },
-	{ label: '子', value: '儿子' },
-	{ label: '女', value: '女儿' },
+import { CHAIN_KEYS, CHAIN_EXAMPLES, SITE } from '../data/site';
+
+interface Props {
+  variant?: 'full' | 'mini';
+}
+
+const { variant = 'full' } = Astro.props;
+const isFull = variant === 'full';
+
+const MODES = [
+  { key: 'default', name: '通用' },
+  { key: 'north', name: '北方' },
+  { key: 'guangdong', name: '广东' },
 ];
 
-const examples = ['妈妈的妈妈的兄弟', '七舅姥爷', '舅妈如何称呼外婆？', '哥哥的儿子'];
+const EXAMPLES = [
+  ...CHAIN_EXAMPLES.map((item) => ({ text: item.chain, chain: item.chain, label: item.label })),
+  { text: '舅妈如何称呼外婆？', chain: '', label: '整句提问' },
+  { text: '七舅姥爷是谁', chain: '', label: '称谓反查' },
+];
 
-const segBtn = 'calc-seg-btn';
-const segGroup =
-	'grid grid-cols-2 gap-1 rounded-lg bg-stone-100/90 p-1 dark:bg-stone-800/70';
-const actionBtn =
-	'rounded-md border border-stone-200/90 bg-white px-4 py-3 text-sm font-medium text-ink shadow-sm transition hover:border-stone-300 hover:bg-stone-50 dark:border-stone-600 dark:bg-night-card dark:text-stone-200 dark:hover:border-stone-500 dark:hover:bg-stone-800';
+const shownExamples = isFull ? EXAMPLES : EXAMPLES.slice(0, 4);
 ---
 
-<div class="relative isolate">
-	<div class="mx-auto w-full max-w-6xl px-4 sm:px-6 lg:px-8">
-		<header class="mb-8 md:mb-10">
-			<h1 class="font-display text-3xl font-bold tracking-tight text-ink sm:text-4xl dark:text-stone-100">
-				亲戚关系计算器
-			</h1>
-			<p class="mt-3 max-w-2xl text-base leading-relaxed text-ink-muted dark:text-stone-400">
-				输入关系链或称呼，浏览器本地即时算出结果。支持反向查询与自然语言问法。
-			</p>
-		</header>
+<section
+  class:list={['calc', !isFull && 'calc--mini']}
+  data-calc
+  data-variant={variant}
+  data-sync-url={isFull ? 'true' : 'false'}
+  aria-label="亲戚称呼计算器"
+>
+  <div class="calc__result" data-result>
+    <div class="result__label">
+      <span>计算结果</span>
+      <span class="result__badge">本地计算 · 不上传</span>
+    </div>
+    <div class="result__main is-empty" data-result-main>
+      点单字拼一条关系链，或直接输入后按「计算」。
+    </div>
+    <div class="result__alt" data-result-alt></div>
+    <div class="result__meta" data-result-meta>
+      例如「父的父」= 爷爷，「母的母的兄」= 舅外公。
+    </div>
+    <div class="result__actions">
+      <button class="result__btn" type="button" data-copy-result>复制结果</button>
+      {!isFull && <a class="result__btn" href="/calc/">打开完整计算器 →</a>}
+    </div>
+    {!isFull && (
+      <p class="result__hint">支持关系链、称呼反查、北方/广东叫法与反向视角。</p>
+    )}
+  </div>
 
-		<div class="grid items-start gap-6 lg:grid-cols-12 lg:gap-8">
-			<div
-				class="rounded-lg border border-stone-200/80 bg-white/90 p-5 sm:p-6 lg:col-span-7 dark:border-stone-700/80 dark:bg-night-card/90"
-			>
-				<label class="mb-2 block text-sm font-medium text-ink-muted dark:text-stone-300" for="calc-input">
-					关系 / 称呼
-				</label>
-				<div class="flex flex-col gap-3 sm:flex-row">
-					<input
-						id="calc-input"
-						class="min-w-0 flex-1 rounded-md border border-stone-200 bg-paper-deep/40 px-4 py-3.5 text-base text-ink outline-none transition placeholder:text-stone-400 focus:border-indigo focus:ring-2 focus:ring-indigo/15 dark:border-stone-600 dark:bg-stone-950/80 dark:text-stone-100 dark:placeholder:text-stone-500"
-						type="text"
-						placeholder="妈妈的妈妈的兄弟，或：七舅姥爷"
-						autocomplete="off"
-						spellcheck="false"
-					/>
-					<button
-						type="button"
-						id="calc-run"
-						class="qq-btn-primary shrink-0 px-8 py-3.5 sm:min-w-[7rem]"
-					>
-						计算
-					</button>
-				</div>
+  <div class="calc__main panel">
+    <div class="calc__label">
+      <span>关系 / 称呼</span>
+      <small>可直接输入「妈妈的妈妈的兄弟」，或点下方单字拼关系链</small>
+    </div>
+    <div class="calc__input-row">
+      <input
+        class="calc__input"
+        data-input
+        type="text"
+        aria-label="关系或称呼"
+        placeholder="妈妈的妈妈的兄弟，或：七舅姥爷"
+        autocomplete="off"
+        spellcheck="false"
+      />
+      <button class="btn btn--primary calc__submit" type="button" data-submit>计算</button>
+    </div>
 
-				<div class="mt-5">
-					<p class="mb-2.5 text-xs font-medium text-stone-400 dark:text-stone-500">
-						快捷输入
-					</p>
-					<div class="grid grid-cols-5 gap-2 sm:grid-cols-10" id="calc-shortcuts">
-						{
-							tokens.map((t) => (
-								<button
-									type="button"
-									class="calc-token-btn flex aspect-square items-center justify-center rounded-md border border-stone-200/90 bg-white text-sm font-semibold text-ink transition hover:border-brand hover:bg-paper-deep hover:text-brand disabled:cursor-not-allowed disabled:border-stone-200/60 disabled:bg-stone-100 disabled:text-stone-300 disabled:opacity-40 disabled:hover:border-stone-200/60 disabled:hover:bg-stone-100 disabled:hover:text-stone-300 dark:border-stone-600 dark:bg-night-card dark:text-stone-200 dark:hover:border-red-500 dark:hover:bg-stone-900 dark:hover:text-red-300 dark:disabled:border-stone-700 dark:disabled:bg-stone-800 dark:disabled:text-stone-600"
-									data-token={t.value}
-									data-spouse={t.value === '老公' ? 'husband' : t.value === '老婆' ? 'wife' : undefined}
-								>
-									{t.label}
-								</button>
-							))
-						}
-					</div>
-				</div>
+    <div class="calc__chain" data-chain>
+      <span class="calc__chain-empty">关系链：尚未输入</span>
+    </div>
 
-				<div class="mt-5 flex flex-wrap items-center gap-2" id="calc-examples">
-					<span class="text-sm text-stone-400 dark:text-stone-500">试试</span>
-					{
-						examples.map((ex) => (
-							<button
-								type="button"
-								class="rounded-md border border-stone-200/80 bg-paper-deep/50 px-3 py-1 text-sm text-ink-muted transition hover:border-stone-300 hover:text-brand dark:border-stone-600 dark:bg-stone-800/80 dark:text-stone-300 dark:hover:border-stone-500 dark:hover:text-red-400"
-								data-example={ex}
-							>
-								{ex}
-							</button>
-						))
-					}
-				</div>
+    <div class="calc__keys-head">
+      <span>单字关系链</span>
+      <span class="calc__keys-hint" data-keys-hint>单字可无限组合</span>
+    </div>
+    <div class="calc__keys" data-keys>
+      {CHAIN_KEYS.map((key) => (
+        <button class="calc__key" type="button" data-key={key.v} title={key.hint}>
+          <span class="calc__key-char">{key.v}</span>
+          <span class="calc__key-hint">{key.hint}</span>
+        </button>
+      ))}
+    </div>
 
-				<div class="mt-6 grid gap-4 border-t border-stone-200/80 pt-6 sm:grid-cols-3 dark:border-stone-700/80">
-					<div>
-						<span class="mb-2 block text-xs font-medium text-ink-muted dark:text-stone-400">我的性别</span>
-						<div class={segGroup} data-option="sex">
-							<button type="button" class:list={[segBtn, 'is-on']} data-value="1">男</button>
-							<button type="button" class={segBtn} data-value="0">女</button>
-						</div>
-					</div>
-					<div>
-						<span class="mb-2 block text-xs font-medium text-ink-muted dark:text-stone-400">称呼方向</span>
-						<div class={segGroup} data-option="reverse">
-							<button type="button" class:list={[segBtn, 'is-on']} data-value="false">我称呼对方</button>
-							<button type="button" class={segBtn} data-value="true">对方称呼我</button>
-						</div>
-					</div>
-					<div>
-						<span class="mb-2 block text-xs font-medium text-ink-muted dark:text-stone-400">计算类型</span>
-						<div class={segGroup} data-option="type">
-							<button type="button" class:list={[segBtn, 'is-on']} data-value="default">关系→称呼</button>
-							<button type="button" class={segBtn} data-value="chain">称呼→关系</button>
-						</div>
-					</div>
-				</div>
+    <div class="calc__toolbar">
+      <button class="calc__tool" type="button" data-tool="back">← 回退一字</button>
+      <button class="calc__tool" type="button" data-tool="clear">清空</button>
+      {isFull && <button class="calc__tool" type="button" data-copy-result>复制结果</button>}
+    </div>
 
-				<div class="mt-5 flex flex-wrap gap-3">
-					<button type="button" id="calc-back" class={actionBtn}>回退</button>
-					<button type="button" id="calc-clear" class={actionBtn}>清空</button>
-				</div>
-			</div>
+    <div class="calc__examples">
+      <span class="calc__examples-label">试试</span>
+      {shownExamples.map((ex) => (
+        <button
+          class="calc__example"
+          type="button"
+          data-example={ex.text}
+          data-chain={ex.chain || undefined}
+        >
+          {ex.label === ex.text ? ex.text : `${ex.label} · ${ex.text}`}
+        </button>
+      ))}
+    </div>
 
-			<aside class="lg:col-span-5 lg:sticky lg:top-24">
-				<div
-					class="flex min-h-[16rem] flex-col rounded-lg border border-stone-200/80 bg-paper-deep/30 p-6 sm:min-h-[20rem] dark:border-stone-700/80 dark:bg-stone-900/40"
-				>
-					<div class="mb-4 flex items-center justify-between">
-						<h2 class="text-sm font-semibold text-ink-muted dark:text-stone-300">
-							计算结果
-						</h2>
-						<span class="text-xs text-stone-400 dark:text-stone-500">
-							本地计算
-						</span>
-					</div>
-					<div
-						id="calc-result"
-						class="empty flex flex-1 flex-wrap content-center items-center gap-2 rounded-md border border-dashed border-stone-200/90 bg-white/60 px-5 py-6 dark:border-stone-600/80 dark:bg-stone-950/40"
-					>
-						<span class="calc-result-placeholder text-center text-stone-400 dark:text-stone-500">
-							输入后点「计算」，或点击上方示例
-						</span>
-					</div>
-				</div>
+    {isFull && (
+      <div class="calc__options">
+        <div>
+          <span class="calc__opt-label">我的性别</span>
+          <div class="seg" data-option="sex">
+            <button class="seg__btn is-on" type="button" data-value="-1">不限</button>
+            <button class="seg__btn" type="button" data-value="1">男</button>
+            <button class="seg__btn" type="button" data-value="0">女</button>
+          </div>
+        </div>
+        <div>
+          <span class="calc__opt-label">称呼方向</span>
+          <div class="seg" data-option="reverse">
+            <button class="seg__btn is-on" type="button" data-value="false">我称呼对方</button>
+            <button class="seg__btn" type="button" data-value="true">对方称呼我</button>
+          </div>
+        </div>
+        <div>
+          <span class="calc__opt-label">计算类型</span>
+          <div class="seg" data-option="type">
+            <button class="seg__btn is-on" type="button" data-value="default">关系 → 称呼</button>
+            <button class="seg__btn" type="button" data-value="chain">称呼 → 关系</button>
+          </div>
+        </div>
+        <div>
+          <span class="calc__opt-label">叫法地区</span>
+          <select class="select" data-option="mode" aria-label="叫法地区">
+            {MODES.map((m) => <option value={m.key}>{m.name}</option>)}
+          </select>
+        </div>
+        <div>
+          <span class="calc__opt-label">结果偏好</span>
+          <div class="seg" data-option="optimal">
+            <button class="seg__btn is-on" type="button" data-value="false">全部叫法</button>
+            <button class="seg__btn" type="button" data-value="true">只给最简</button>
+          </div>
+        </div>
+        <div>
+          <span class="calc__opt-label">分享</span>
+          <button class="btn btn--outline btn--sm" type="button" data-copy-link style="width:100%">
+            复制带参数的链接
+          </button>
+        </div>
+      </div>
+    )}
+  </div>
 
-				<p class="mt-4 text-center text-xs leading-relaxed text-stone-400 dark:text-stone-500">
-					算法基于
-					<a
-						class="text-indigo hover:text-brand hover:underline dark:text-stone-400 dark:hover:text-red-400"
-						href="https://github.com/mumuy/relationship"
-						target="_blank"
-						rel="noopener">relationship.js</a
-					>
-					· 分享链接
-					<code class="rounded-md bg-stone-100 px-1.5 py-0.5 dark:bg-stone-800">?q=妈妈的妈妈的兄弟</code>
-				</p>
-			</aside>
-		</div>
-	</div>
-</div>
+  {isFull && (
+    <div class="calc__side">
+      <div class="aside-card">
+        <h3 class="aside-card__title">单字速记</h3>
+        <p style="font-size:.83rem;line-height:1.85;color:var(--ink-2)">
+          父=爸爸 · 母=妈妈 · 兄/弟=哥哥/弟弟 · 姐/妹=姐姐/妹妹 · 夫/妻=老公/老婆 · 子/女=儿子/女儿
+        </p>
+        <p style="font-size:.83rem;line-height:1.85;color:var(--ink-2);margin-top:8px">
+          链末端是男的，自动屏蔽「夫」；是女的，屏蔽「妻」。兄、弟、姐、妹等键始终可用。
+        </p>
+      </div>
+      <div class="calc__history" data-history hidden>
+        <div class="calc__history-head">
+          <span>最近查过</span>
+          <button type="button" data-history-clear>清空</button>
+        </div>
+        <div class="calc__history-list" data-history-list></div>
+      </div>
+      <p class="result__hint" style="color:var(--muted);margin-top:14px;opacity:1">
+        算法来自 <a href={SITE.lib} target="_blank" rel="noopener" style="text-decoration:underline">relationship.js</a>
+        v{SITE.libVersion}（MIT）；北方 / 广东叫法使用该库官方方言数据。各地习惯不同，结果供参考。
+      </p>
+    </div>
+  )}
+</section>
 
-<script src="../scripts/calc.ts"></script>
+<style>
+  .calc--mini {
+    grid-template-columns: 1fr;
+  }
+  .calc--mini .calc__result {
+    min-height: 0;
+    padding: 22px;
+  }
+  .calc--mini .result__main {
+    margin-top: 16px;
+  }
+  .calc--mini .result__actions {
+    margin-top: 18px;
+  }
+  .calc--mini .calc__examples {
+    margin-top: 14px;
+  }
+</style>
+
+<script src="../scripts/calculator.js"></script>

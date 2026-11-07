@@ -1,19 +1,21 @@
 import { defineCollection, z } from 'astro:content';
-import { docsLoader } from '@astrojs/starlight/loaders';
-import { docsSchema } from '@astrojs/starlight/schema';
+import { glob } from 'astro/loaders';
 
-export const collections = {
-	docs: defineCollection({
-		loader: docsLoader(),
-		schema: docsSchema({
-			extend: z.object({
-				date: z.coerce.date().optional(),
-				tags: z.array(z.string()).optional(),
-				/** 本地封面路径，如 /images/articles/foo.webp */
-				cover: z.string().optional(),
-				/** 待下载的网络封面（由 npm run article:covers 处理） */
-				coverUrl: z.string().url().optional(),
-			}),
-		}),
-	}),
-};
+/**
+ * 原生 Astro 内容集合，替代 Starlight 的 docsLoader / docsSchema。
+ * 文章 frontmatter 里残留的 sidebar / prev / next 等 Starlight 字段会被自动忽略。
+ */
+const docs = defineCollection({
+  loader: glob({ pattern: '**/*.{md,mdx}', base: './src/content/docs' }),
+  schema: z.object({
+    title: z.string(),
+    description: z.string().default(''),
+    date: z.coerce.date().optional(),
+    tags: z.array(z.string()).default([]),
+    cover: z.string().optional(),
+    coverUrl: z.string().optional(),
+    draft: z.boolean().default(false),
+  }),
+});
+
+export const collections = { docs };

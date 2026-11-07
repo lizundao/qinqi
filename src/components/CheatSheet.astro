@@ -1,0 +1,54 @@
+---
+import { CHEATS, CHEAT_GROUPS, type Cheat } from '../data/cheats';
+
+interface Props {
+  items?: Cheat[];
+  limit?: number;
+  filters?: boolean;
+}
+
+const { items = CHEATS, limit, filters = false } = Astro.props;
+const shown = limit ? items.slice(0, limit) : items;
+---
+
+{filters && (
+  <div class="cheats__filters" data-cheat-filters>
+    {CHEAT_GROUPS.map((group) => (
+      <button class:list={['chip', group === '全部' && 'is-active']} type="button" data-group={group}>
+        {group}
+      </button>
+    ))}
+  </div>
+)}
+
+<div class="cheats" data-cheats>
+  {shown.map((item) => (
+    <a
+      class="cheat"
+      href={`/calc/?chain=${encodeURIComponent(item.chain)}`}
+      data-group={item.group}
+      title={`在计算器里打开「${item.q}」`}
+    >
+      <span class="cheat__group">{item.group}</span>
+      <span class="cheat__q">{item.q}</span>
+      <span class="cheat__a"><span class="cheat__arrow">应该叫</span>{item.answer}</span>
+      {item.alt.length > 0 && <span class="cheat__alt">也可叫：{item.alt.join('、')}</span>}
+    </a>
+  ))}
+</div>
+
+{filters && (
+  <script is:inline>
+    document.querySelector('[data-cheat-filters]')?.addEventListener('click', (event) => {
+      const btn = event.target.closest('button[data-group]');
+      if (!btn) return;
+      const group = btn.dataset.group;
+      document.querySelectorAll('[data-cheat-filters] .chip').forEach((chip) => {
+        chip.classList.toggle('is-active', chip === btn);
+      });
+      document.querySelectorAll('[data-cheats] .cheat').forEach((card) => {
+        card.classList.toggle('is-hidden', group !== '全部' && card.dataset.group !== group);
+      });
+    });
+  </script>
+)}

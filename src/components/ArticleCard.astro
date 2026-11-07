@@ -1,0 +1,24 @@
+---
+import type { ArticleView } from '../utils/articles';
+
+interface Props {
+  article: ArticleView;
+}
+
+const { article } = Astro.props;
+---
+
+<a class="article-card" href={article.href} data-article-card data-search={`${article.title} ${article.description} ${article.tags.join(' ')}`.toLowerCase()} data-topic={article.topic.slug}>
+  {article.cover && (
+    <img class="article-card__cover" src={article.cover} alt="" loading="lazy" width="640" height="360" />
+  )}
+  <div class="article-card__body">
+    <span class="article-card__topic">{article.topic.title}</span>
+    <h3 class="article-card__title">{article.title}</h3>
+    <p class="article-card__desc">{article.description}</p>
+    <div class="article-card__meta">
+      {article.dateLabel && <span>{article.dateLabel}</span>}
+      {article.tags.slice(0, 2).map((tag) => <span class="tag">{tag}</span>)}
+    </div>
+  </div>
+</a>

@@ -1,0 +1,69 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import ArticleCard from '../../components/ArticleCard.astro';
+import { TOPICS, topicHref } from '../../data/topics';
+import { getArticlesByTopic } from '../../utils/articles';
+import { SITE } from '../../data/site';
+
+export async function getStaticPaths() {
+  return Promise.all(
+    TOPICS.map(async (topic) => ({
+      params: { tag: topic.slug },
+      props: { topic, articles: await getArticlesByTopic(topic.slug) },
+    }))
+  );
+}
+
+const { topic, articles } = Astro.props;
+
+const collectionLd = {
+  '@context': 'https://schema.org',
+  '@type': 'CollectionPage',
+  name: `${topic.title} · 亲戚常识`,
+  url: new URL(topicHref(topic.slug), SITE.url).href,
+  description: topic.description,
+  numberOfItems: articles.length,
+};
+---
+
+<BaseLayout
+  title={`${topic.title} · 亲戚常识`}
+  description={`${topic.description} 本栏目共 ${articles.length} 篇文章。`}
+  keywords={`${topic.title},亲戚常识,${topic.short},中国亲戚关系`}
+  jsonLd={[collectionLd]}
+>
+  <div class="container page-head">
+    <Breadcrumbs items={[{ label: '亲戚常识', href: '/articles/' }, { label: topic.title }]} />
+    <h1 class="page-head__title">{topic.title}</h1>
+    <p class="page-head__desc">{topic.description} · 共 {articles.length} 篇</p>
+  </div>
+
+  <section class="section" style="padding-top:26px">
+    <div class="container">
+      <div class="filter-bar">
+        <a class="chip" href="/articles/">全部文章</a>
+        {TOPICS.map((item) => (
+          <a class:list={['chip', item.slug === topic.slug && 'is-active']} href={topicHref(item.slug)}>
+            {item.title}
+          </a>
+        ))}
+      </div>
+
+      {articles.length > 0 ? (
+        <div class="article-grid">
+          {articles.map((article) => <ArticleCard article={article} />)}
+        </div>
+      ) : (
+        <div class="empty-state">这个栏目暂时还没有文章，去<a href="/articles/" style="color:var(--blue)">文章库</a>看看别的。</div>
+      )}
+
+      <div class="notice" style="margin-top:40px">
+        想不起某个长辈该怎么称呼？先用
+        <a href="/calc/" style="color:var(--blue);text-decoration:underline;font-weight:700">称呼计算器</a>
+        拼关系链，或查
+        <a href="/cheatsheet/" style="color:var(--blue);text-decoration:underline;font-weight:700">速查表</a>。
+      </div>
+    </div>
+  </section>
+</BaseLayout>
