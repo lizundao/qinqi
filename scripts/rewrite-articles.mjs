@@ -17,10 +17,11 @@ import { ENTRIES as E4 } from './lexicon/part-4.mjs';
 import { ENTRIES as E5 } from './lexicon/part-5.mjs';
 import { ENTRIES as E6 } from './lexicon/part-6.mjs';
 import { ENTRIES as E7 } from './lexicon/part-7.mjs';
+import { ENTRIES as E8 } from './lexicon/part-8.mjs';
 
 const ROOT = path.resolve(fileURLToPath(new URL('..', import.meta.url)));
 const DIR = path.join(ROOT, 'src/content/docs/articles');
-const ENTRIES = [...E1, ...E2, ...E3, ...E4, ...E5, ...E6, ...E7];
+const ENTRIES = [...E1, ...E2, ...E3, ...E4, ...E5, ...E6, ...E7, ...E8];
 
 /** 栏目中文名（同时作为受控标签，保证自动归类稳定） */
 export const TOPIC_LABEL = {
@@ -73,7 +74,7 @@ function getDate(slug) {
   } catch {
     /* 新文件用今天 */
   }
-  return '2026-11-09';
+  return '2026-11-10';
 }
 
 function relatedFor(entry, index) {

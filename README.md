@@ -15,8 +15,8 @@
 | 品牌 | 宣纸米白 + 朱红，和小程序蓝底 logo 不一致 | 与小程序统一的 `#2E6BEF` 蓝色体系、圆角卡片、同款 logo |
 | 首屏 | 只有标题 + 两张功能卡，要跳转才能算 | **结果卡置顶的可用计算器**：先看答案，下面是输入与十单字键盘 |
 | 计算器 | 文本输入 + 插入「爸爸/妈妈」词块，无方言 | 十单字关系链、性别自动屏蔽、称呼反查、反向视角、通用/北方/广东、URL 分享、本地历史 |
-| 内容 | 97 篇 AI 俗语散文 + 245 个零散标签，无分类 | 101 篇「关系链 → 称呼」词条式百科、8 个受控栏目、71 个标签、每篇附实算称呼表 |
-| 封面图 | 97 张 AI 写实中国风摄影，10.2MB | 101 张程序化品牌蓝关系链信息图，约 3.3MB，图文同源、可复现，页面完整不裁切 |
+| 内容 | 97 篇 AI 俗语散文 + 245 个零散标签，无分类 | 103 篇「关系链 → 称呼」词条式百科、8 个受控栏目、84 个标签、每篇附实算称呼表 |
+| 封面图 | 97 张 AI 写实中国风摄影，10.2MB | 103 张程序化品牌蓝关系链信息图，约 3.4MB，图文同源、可复现，页面完整不裁切 |
 | SEO / GEO | 无 canonical、无 sitemap、无结构化数据 | canonical / OG / JSON-LD（WebSite、WebApplication、FAQPage、Article、BreadcrumbList）/ sitemap.xml / robots.txt / llms.txt / llms-full.txt |
 | 数据可信度 | 速查类内容靠手写 | `src/data/cheats.ts` 与每篇文章的称呼表都由 `relationship.js` **实际计算**生成 |
 
@@ -40,19 +40,24 @@
 ### 2026-11-09 内容增补
 
 - 新增 2 篇词条文章：`ba-fu-shu-fu-gu-mu`（伯父、叔父、姑母：爸爸的兄弟姐妹怎么分别称呼）、`qin-jia-gong-qin-jia-mu`（亲家公、亲家母：儿女成婚后双方父母怎么互称）。文章与封面总数 99 → 101。
-- 词条分片由 `part-1..6` 增至 `part-1..7`，`rewrite-articles.mjs` 已 import 并拼进 `ENTRIES`；新增文件自动使用当天日期（`getDate` 兜底 `2026-11-09`）。
+
+### 2026-11-10 内容增补
+
+- 新增 2 篇词条文章：`gong-po-yue-fu-mu`（公婆、岳父母：配偶的父母怎么称呼）、`biao-ge-biao-jie`（表哥表姐表弟表妹：表亲怎么分）。文章与封面总数 101 → 103，标签 71 → 84。
+- 随文章集合变化，部分「相关词条」交叉链接由 `relatedFor` 自动重排（确定性结果，非手改）。
+- 词条分片由 `part-1..6` 增至 `part-1..8`，`rewrite-articles.mjs` 已 import 并拼进 `ENTRIES`；新增文件自动使用当天日期（`getDate` 兜底 `2026-11-10`）。
 
 ## 本地开发
 
 ```bash
 npm install
 npm run dev        # http://localhost:4321/
-npm run build      # 产物 dist/，115 个页面
+npm run build      # 产物 dist/，117 个页面
 npm run preview
 
 npm run data:cheats      # 用 relationship.js 实算，重新生成称呼速查表
-npm run content:rewrite  # 按词条数据重写 101 篇文章
-npm run content:covers   # 按文章内容重生成 101 张封面（需要 Python + Pillow）
+npm run content:rewrite  # 按词条数据重写 103 篇文章
+npm run content:covers   # 按文章内容重生成 103 张封面（需要 Python + Pillow）
 ```
 
 主要页面：
@@ -62,7 +67,7 @@ npm run content:covers   # 按文章内容重生成 101 张封面（需要 Pytho
 | `/` | 首页：结果置顶的计算器、第二屏小程序码、速查精选、栏目、文章、FAQ |
 | `/calc/` | 完整计算器，支持 `?chain=&sex=&reverse=&type=&mode=&optimal=` 还原 |
 | `/cheatsheet/` | 23 条常见称呼速查（可按父系/母系/祖辈/晚辈/姻亲筛选） |
-| `/articles/` | 101 篇文章，前端搜索 + 栏目筛选 + 分页 |
+| `/articles/` | 103 篇文章，前端搜索 + 栏目筛选 + 分页 |
 | `/articles/<slug>/` | 文章详情，含相关阅读与结构化数据 |
 | `/topics/<slug>/` | 8 个栏目页 |
 | `/about/` | 关于与口径说明 |
