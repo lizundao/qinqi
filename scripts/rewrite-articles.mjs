@@ -99,7 +99,9 @@ function render(entry, index) {
   const related = relatedFor(entry, index);
   const calcLink = `/calc/?chain=${encodeURIComponent(entry.c)}`;
 
-  const description = `${entry.a} 附「${entry.h}」的关系链与称呼对照表。`;
+  // 标题本身常含「」（俗语类词条），外层再包「」会嵌套；按中文引号规范降一级为『』
+  const safeTitle = entry.h.replace(/「/g, '『').replace(/」/g, '』');
+  const description = `${entry.a} 附「${safeTitle}」的关系链与称呼对照表。`;
   const body = `
 ${entry.q}${entry.d ? ` ${entry.d}` : ''}本文按「关系链 → 称呼」的方式拆开来讲，不谈感情，只讲怎么算、怎么叫。
 

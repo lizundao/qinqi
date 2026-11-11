@@ -11,6 +11,7 @@
     "data:cheats": "node scripts/generate-cheats.mjs",
     "content:rewrite": "node scripts/rewrite-articles.mjs",
     "content:covers": "python3 scripts/generate-covers.py",
+    "brand:assets": "python3 scripts/generate-brand-assets.py",
     "article:ai": "node scripts/generate-article.mjs",
     "article:topics": "node scripts/generate-topics.mjs",
     "article:batch": "node scripts/batch-articles.mjs",

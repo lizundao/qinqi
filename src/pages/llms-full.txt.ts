@@ -29,7 +29,7 @@ export const GET: APIRoute = async () => {
   }
 
   lines.push('## 工具页面', '');
-  lines.push(`- [亲戚关系计算器](${SITE.url}/calc/)`);
+  lines.push(`- [称呼计算器](${SITE.url}/calc/)`);
   lines.push(`- [常见称呼速查表](${SITE.url}/cheatsheet/)`);
   lines.push('');
 

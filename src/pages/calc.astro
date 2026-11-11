@@ -9,7 +9,7 @@ import { SITE } from '../data/site';
 const appLd = {
   '@context': 'https://schema.org',
   '@type': 'WebApplication',
-  name: `${SITE.appName} · 网页版`,
+  name: `${SITE.name} · 称呼计算器`,
   url: new URL('/calc/', SITE.url).href,
   applicationCategory: 'UtilitiesApplication',
   operatingSystem: 'Web',
@@ -24,14 +24,14 @@ const appLd = {
 ---
 
 <BaseLayout
-  title="亲戚关系计算器"
+  title="称呼计算器"
   description="输入关系链或称呼，浏览器本地即时算出正确叫法。支持称呼反查、反向视角与通用/北方/广东三种叫法，附使用说明与常见称呼速查。"
-  keywords="亲戚关系计算器,称呼计算器,关系链计算,七舅姥爷,堂表亲,北方叫法,广东叫法"
+  keywords={`${SITE.name},称呼计算器,亲戚关系计算器,关系链计算,七舅姥爷,堂表亲,北方叫法,广东叫法`}
   jsonLd={[appLd]}
 >
   <div class="container page-head">
     <Breadcrumbs items={[{ label: '称呼计算器' }]} />
-    <h1 class="page-head__title">亲戚关系计算器</h1>
+    <h1 class="page-head__title">称呼计算器</h1>
     <p class="page-head__desc">
       拼一条关系链，或输入一个称呼让工具反查。计算在浏览器本地完成，不上传、不记录。
     </p>
