@@ -19,10 +19,11 @@ import { ENTRIES as E6 } from './lexicon/part-6.mjs';
 import { ENTRIES as E7 } from './lexicon/part-7.mjs';
 import { ENTRIES as E8 } from './lexicon/part-8.mjs';
 import { ENTRIES as E9 } from './lexicon/part-9.mjs';
+import { ENTRIES as E10 } from './lexicon/part-10.mjs';
 
 const ROOT = path.resolve(fileURLToPath(new URL('..', import.meta.url)));
 const DIR = path.join(ROOT, 'src/content/docs/articles');
-const ENTRIES = [...E1, ...E2, ...E3, ...E4, ...E5, ...E6, ...E7, ...E8, ...E9];
+const ENTRIES = [...E1, ...E2, ...E3, ...E4, ...E5, ...E6, ...E7, ...E8, ...E9, ...E10];
 
 /** 栏目中文名（同时作为受控标签，保证自动归类稳定） */
 export const TOPIC_LABEL = {
@@ -54,7 +55,13 @@ const WORD = {
 };
 
 function readable(chain) {
-  return chain.split('的').map((x) => WORD[x] || x).join('的');
+  // 「之子 / 之女」不是独立节点词，先拆成「的子 / 的女」，否则会渲染成「儿子的子之子」
+  return chain
+    .replace(/之子/g, '的子')
+    .replace(/之女/g, '的女')
+    .split('的')
+    .map((x) => WORD[x] || x)
+    .join('的');
 }
 
 function calc(chain) {
@@ -75,7 +82,7 @@ function getDate(slug) {
   } catch {
     /* 新文件用今天 */
   }
-  return '2026-11-11';
+  return '2026-11-14';
 }
 
 function relatedFor(entry, index) {
@@ -133,7 +140,7 @@ ${related.map((x) => `- [${x.h}](/articles/${x.s}/)`).join('\n')}
 
 ## 口径说明
 
-亲戚称呼有明确的辈分与父系 / 母系规则，但各地习惯差异很大。本文给的是通用口径，实际称呼以自家习惯为准；需要算更长的链，用[亲戚关系计算器](/calc/)或查[常见称呼速查表](/cheatsheet/)。
+亲戚称呼有明确的辈分与父系 / 母系规则，但各地习惯差异很大。本文给的是通用口径，实际称呼以自家习惯为准；需要算更长的链，用[称呼计算器](/calc/)或查[常见称呼速查表](/cheatsheet/)。
 `.trim();
 
   const frontmatter = `---
