@@ -15,8 +15,8 @@
 | 品牌 | 宣纸米白 + 朱红，和小程序蓝底 logo 不一致 | 与小程序统一的 `#2E6BEF` 蓝色体系、圆角卡片、同款 logo |
 | 首屏 | 只有标题 + 两张功能卡，要跳转才能算 | **结果卡置顶的可用计算器**：先看答案，下面是输入与十单字键盘 |
 | 计算器 | 文本输入 + 插入「爸爸/妈妈」词块，无方言 | 十单字关系链、性别自动屏蔽、称呼反查、反向视角、通用/北方/广东、URL 分享、本地历史 |
-| 内容 | 97 篇 AI 俗语散文 + 245 个零散标签，无分类 | 111 篇「关系链 → 称呼」词条式百科、8 个受控栏目、124 个标签、每篇附实算称呼表 |
-| 封面图 | 97 张 AI 写实中国风摄影，10.2MB | 111 张程序化品牌蓝关系链信息图，约 3.7MB，图文同源、可复现，页面完整不裁切 |
+| 内容 | 97 篇 AI 俗语散文 + 245 个零散标签，无分类 | 113 篇「关系链 → 称呼」词条式百科、8 个受控栏目、131 个标签、每篇附实算称呼表 |
+| 封面图 | 97 张 AI 写实中国风摄影，10.2MB | 113 张程序化品牌蓝关系链信息图，约 3.8MB，图文同源、可复现，页面完整不裁切 |
 | SEO / GEO | 无 canonical、无 sitemap、无结构化数据 | canonical / OG / JSON-LD（WebSite、WebApplication、FAQPage、Article、BreadcrumbList）/ sitemap.xml / robots.txt / llms.txt / llms-full.txt |
 | 数据可信度 | 速查类内容靠手写 | `src/data/cheats.ts` 与每篇文章的称呼表都由 `relationship.js` **实际计算**生成 |
 
@@ -72,6 +72,12 @@
 - 第一篇补上直系向上的第四代（与「孙子、孙女、外孙、曾孙」构成上下对称），第二篇补上同胞的配偶（与「儿媳、女婿」构成平辈姻亲的两岸）。称呼均由 relationship.js v1.2.9 实算，未手写；「外曾外祖父」等长链按实算原样保留。
 - 词条分片增至 `part-1..12`，`getDate` 兜底改为 `2026-11-21`；28 篇既有文章的「相关词条」由 `relatedFor` 确定性重排，正文 / 标题 / 日期 / 封面均未变，旧 109 张封面 SHA-256 字节一致。
 
+### 2026-11-22 内容增补
+
+- 新增 2 篇词条文章：`bo-mu-shen-shen-jiu-ma-yi-zhang`（伯母、婶婶、大舅妈、大姨丈：长辈的配偶怎么称呼）、`zhi-sun-sheng-sun-zhi-sun-nv`（侄孙、甥孙、侄孙女：兄弟的孙辈怎么称呼）。文章与封面总数 111 → 113，标签 124 → 131。
+- 第一篇把长辈配偶从既有的三条（姑父 / 姨父 / 舅妈）补齐到父系母系各四共八条，并说明配偶这一层父系母系都不加「外」；第二篇接在「侄子与外甥」之后往下再跳一代，明确区分甥孙（走姐妹的儿子）与外孙（走自己的女儿）。称呼均由 relationship.js v1.2.9 实算。
+- 词条分片增至 `part-1..13`，`getDate` 兜底改为 `2026-11-22`；36 篇既有文章的「相关词条」由 `relatedFor` 确定性重排，正文 / 标题 / 日期 / 封面均未变，旧 111 张封面 SHA-256 字节一致。
+
 ### 2026-11-11 全站风格统一
 
 - **品牌命名**：网站侧统一为「亲戚百科」（`SITE.name` 为唯一真源），清理「亲戚称呼计算器」「在线称呼计算器」等别名；网页工具统一称「称呼计算器」，页面标题由 `BaseLayout` 自动补 `| 亲戚百科`，首页 / 计算器页 `WebApplication` 结构化数据的 name 不再误用小程序名。小程序注册名「亲戚关系计算丫」保持不变。
@@ -84,12 +90,12 @@
 ```bash
 npm install
 npm run dev        # http://localhost:4321/
-npm run build      # 产物 dist/，125 个页面
+npm run build      # 产物 dist/，127 个页面
 npm run preview
 
 npm run data:cheats      # 用 relationship.js 实算，重新生成称呼速查表
-npm run content:rewrite  # 按词条数据重写 111 篇文章
-npm run content:covers   # 按文章内容重生成 111 张封面（需要 Python + Pillow）
+npm run content:rewrite  # 按词条数据重写 113 篇文章
+npm run content:covers   # 按文章内容重生成 113 张封面（需要 Python + Pillow）
 npm run brand:assets     # 重画 og.png 与 poster.png（需要 Python + Pillow）
 ```
 
@@ -100,7 +106,7 @@ npm run brand:assets     # 重画 og.png 与 poster.png（需要 Python + Pillow
 | `/` | 首页：结果置顶的计算器、第二屏小程序码、速查精选、栏目、文章、FAQ |
 | `/calc/` | 完整计算器，支持 `?chain=&sex=&reverse=&type=&mode=&optimal=` 还原 |
 | `/cheatsheet/` | 23 条常见称呼速查（可按父系/母系/祖辈/晚辈/姻亲筛选） |
-| `/articles/` | 111 篇文章，前端搜索 + 栏目筛选 + 分页 |
+| `/articles/` | 113 篇文章，前端搜索 + 栏目筛选 + 分页 |
 | `/articles/<slug>/` | 文章详情，含相关阅读与结构化数据 |
 | `/topics/<slug>/` | 8 个栏目页 |
 | `/about/` | 关于与口径说明 |
