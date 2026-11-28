@@ -10,6 +10,7 @@
   python3 scripts/generate-covers.py                            # 全量生成
 """
 import argparse
+import glob
 import json
 import os
 import re
@@ -28,7 +29,13 @@ LIGHT = (75, 134, 255)
 GOLD = (255, 216, 107)
 WHITE = (255, 255, 255)
 SOFT = (220, 232, 255)
-FONT_PATH = '/System/Library/Fonts/PingFang.ttc'
+# 新版 macOS 把 PingFang 移到 AssetsV2，按优先级找出第一个可用字体
+FONT_CANDIDATES = [
+    '/System/Library/Fonts/PingFang.ttc',
+    *glob.glob('/System/Library/AssetsV2/com_apple_MobileAsset_Font*/*/AssetData/PingFang.ttc'),
+    '/System/Library/Fonts/STHeiti Medium.ttc',
+]
+FONT_PATH = next((p for p in FONT_CANDIDATES if os.path.isfile(p)), FONT_CANDIDATES[0])
 
 WORD = {
     '父': '爸爸', '母': '妈妈', '兄': '哥哥', '姐': '姐姐', '夫': '老公',
